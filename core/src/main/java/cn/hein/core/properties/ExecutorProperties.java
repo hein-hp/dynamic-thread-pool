@@ -40,7 +40,7 @@ public class ExecutorProperties {
     /**
      * 线程空闲时间
      */
-    private int keepAliveSeconds;
+    private int keepAliveTime;
 
     /**
      * 时间单位
