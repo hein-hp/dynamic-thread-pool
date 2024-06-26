@@ -1,4 +1,4 @@
-package cn.hein.core.config;
+package cn.hein.core.properties;
 
 import lombok.Data;
 
