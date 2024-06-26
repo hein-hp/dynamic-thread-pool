@@ -1,5 +1,6 @@
 package cn.hein.core.common.enums.dynamic;
 
+import cn.hein.core.queue.ResizeLinkedBlockingQueue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -32,9 +33,15 @@ public enum BlockingQueueTypeEnum {
     /**
      * SynchronousQueue
      */
-    SYNCHRONOUS_QUEUE("SynchronousQueue", SynchronousQueue.class);
+    SYNCHRONOUS_QUEUE("SynchronousQueue", SynchronousQueue.class),
+
+    /**
+     * ResizeLinkedBlockingQueue
+     */
+    RESIZE_LINKED_BLOCKING_QUEUE("ResizeLinkedBlockingQueue", ResizeLinkedBlockingQueue.class);
 
     private final String name;
+    @SuppressWarnings("rawtypes")
     private final Class<? extends BlockingQueue> queueClass;
 
     public static BlockingQueue<Runnable> getBlockingQueue(String name, int capacity) {
@@ -46,6 +53,7 @@ public enum BlockingQueueTypeEnum {
         throw new IllegalArgumentException("Unknown blocking queue type: " + name);
     }
 
+    @SuppressWarnings("rawtypes")
     private static BlockingQueue<Runnable> createQueue(Class<? extends BlockingQueue> queueClass, int capacity) {
         try {
             if (queueClass.equals(ArrayBlockingQueue.class)) {
@@ -56,6 +64,8 @@ public enum BlockingQueueTypeEnum {
                 return new PriorityBlockingQueue<>(capacity);
             } else if (queueClass.equals(SynchronousQueue.class)) {
                 return new SynchronousQueue<>();
+            } else if (queueClass.equals(ResizeLinkedBlockingQueue.class)) {
+                return new ResizeLinkedBlockingQueue<>(capacity);
             } else {
                 throw new IllegalArgumentException("Unsupported blocking queue type: " + queueClass.getName());
             }
