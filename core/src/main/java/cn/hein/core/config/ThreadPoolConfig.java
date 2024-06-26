@@ -1,9 +1,10 @@
-package cn.hein.core.dynamic;
+package cn.hein.core.config;
 
 import cn.hein.core.common.enums.dynamic.BlockingQueueTypeEnum;
 import cn.hein.core.common.enums.dynamic.RejectionPolicyTypeEnum;
-import cn.hein.core.config.DynamicThreadPoolProperties;
-import cn.hein.core.config.ExecutorProperties;
+import cn.hein.core.dynamic.DynamicThreadPoolExecutor;
+import cn.hein.core.properties.DynamicThreadPoolProperties;
+import cn.hein.core.properties.ExecutorProperties;
 import cn.hein.core.toolkit.TimeUnitConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
