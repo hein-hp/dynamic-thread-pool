@@ -18,10 +18,13 @@ public class DynamicThreadPoolExecutor extends ThreadPoolExecutor {
             TimeUnit unit,
             BlockingQueue<Runnable> workQueue,
             RejectedExecutionHandler handler) {
-        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, new CustomThreadFactory(executorNamePrefix), handler);
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, new NamedThreadFactory(executorNamePrefix), handler);
     }
 
-    private static class CustomThreadFactory implements ThreadFactory {
+    /**
+     * 命名线程工厂
+     */
+    private static class NamedThreadFactory implements ThreadFactory {
 
         /**
          * 线程名称前缀
@@ -33,7 +36,7 @@ public class DynamicThreadPoolExecutor extends ThreadPoolExecutor {
          */
         private final AtomicLong id = new AtomicLong(0);
 
-        public CustomThreadFactory(String prefix) {
+        public NamedThreadFactory(String prefix) {
             this.prefix = prefix;
         }
 
