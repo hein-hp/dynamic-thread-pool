@@ -1,18 +1,10 @@
 package cn.hein.core.config;
 
-import cn.hein.core.common.enums.dynamic.BlockingQueueTypeEnum;
-import cn.hein.core.common.enums.dynamic.RejectionPolicyTypeEnum;
-import cn.hein.core.dynamic.DynamicThreadPoolExecutor;
 import cn.hein.core.properties.DynamicThreadPoolProperties;
-import cn.hein.core.properties.ExecutorProperties;
-import cn.hein.core.toolkit.TimeUnitConverter;
+import cn.hein.core.registry.DynamicThreadPoolBeanRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 线程池配置类
@@ -23,24 +15,14 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class ThreadPoolConfig {
 
-    private final DynamicThreadPoolProperties properties;
+    private final DynamicThreadPoolProperties dynamicThreadPoolProperties;
 
     @Bean
-    public ThreadPoolExecutor threadPoolExecutor() {
-        if (!properties.isEnable()) {
-            return new ThreadPoolExecutor(10, 20, 60, TimeUnit.SECONDS,
-                    new ArrayBlockingQueue<>(1000),
-                    new ThreadPoolExecutor.AbortPolicy());
+    public DynamicThreadPoolBeanRegistry dynamicThreadPoolBeanRegistry() {
+        if (dynamicThreadPoolProperties.isEnable()) {
+            return new DynamicThreadPoolBeanRegistry(dynamicThreadPoolProperties);
+        } else {
+            return null;
         }
-        ExecutorProperties executorProperties = properties.getExecutorProperties().get(0);
-        return new DynamicThreadPoolExecutor(
-                executorProperties.getExecutorNamePrefix(),
-                executorProperties.getCorePoolSize(),
-                executorProperties.getMaximumPoolSize(),
-                executorProperties.getKeepAliveSeconds(),
-                TimeUnitConverter.convert(executorProperties.getTimeUnit()),
-                BlockingQueueTypeEnum.getBlockingQueue(executorProperties.getQueueType(), executorProperties.getQueueCapacity()),
-                RejectionPolicyTypeEnum.getRejectionPolicy(executorProperties.getRejectedExecutionHandler())
-        );
     }
 }
