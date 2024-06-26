@@ -40,7 +40,14 @@ public enum BlockingQueueTypeEnum {
      */
     RESIZE_LINKED_BLOCKING_QUEUE("ResizeLinkedBlockingQueue", ResizeLinkedBlockingQueue.class);
 
+    /**
+     * 阻塞队列名称
+     */
     private final String name;
+
+    /**
+     * 阻塞队列类型
+     */
     @SuppressWarnings("rawtypes")
     private final Class<? extends BlockingQueue> queueClass;
 

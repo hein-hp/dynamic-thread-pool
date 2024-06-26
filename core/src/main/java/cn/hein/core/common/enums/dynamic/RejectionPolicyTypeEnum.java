@@ -34,7 +34,14 @@ public enum RejectionPolicyTypeEnum {
      */
     CALLER_RUNS("CALLER_RUNS", new ThreadPoolExecutor.CallerRunsPolicy());
 
+    /**
+     * 拒绝策略名称
+     */
     private final String name;
+
+    /**
+     * 拒绝策略类型
+     */
     private final RejectedExecutionHandler handler;
 
     public static RejectedExecutionHandler getRejectionPolicy(String name) {
