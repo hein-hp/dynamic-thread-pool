@@ -24,4 +24,14 @@ public class NotifyItemProperties {
      * Threshold value for triggering the notification.
      */
     private double threshold;
+
+    /**
+     * Interval for sending notifications.
+     */
+    private int interval;
+
+    /**
+     * Time unit for sending notifications.
+     */
+    private String timeUnit;
 }

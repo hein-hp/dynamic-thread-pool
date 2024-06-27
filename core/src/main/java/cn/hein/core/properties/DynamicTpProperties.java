@@ -22,6 +22,11 @@ public class DynamicTpProperties {
     private boolean enable;
 
     /**
+     * Whether to notify configuration changes
+     */
+    private boolean change;
+
+    /**
      * Alarm platform configurations.
      */
     private List<PlatformProperties> platforms;

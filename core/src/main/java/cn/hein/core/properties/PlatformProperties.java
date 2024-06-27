@@ -16,7 +16,7 @@ public class PlatformProperties {
     private String platform;
 
     /**
-     * Recipient's email address.
+     * Alarm notification recipient.
      */
-    private String receiveEmail;
+    private String receiver;
 }
