@@ -4,8 +4,10 @@ import cn.hein.core.common.enums.executors.BlockingQueueTypeEnum;
 import cn.hein.core.common.enums.executors.RejectionPolicyTypeEnum;
 import cn.hein.core.dynamic.DynamicTpExecutor;
 import cn.hein.core.properties.DynamicTpProperties;
+import cn.hein.core.properties.DynamicTpPropertiesHolder;
 import cn.hein.core.properties.ExecutorProperties;
 import cn.hein.core.toolkit.TimeUnitConvertUtil;
+import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -30,6 +32,9 @@ public class DynamicTpInitListener implements ApplicationListener<ApplicationRea
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         ConfigurableListableBeanFactory beanFactory = event.getApplicationContext().getBeanFactory();
+        DynamicTpProperties copy = new DynamicTpProperties();
+        BeanUtil.copyProperties(dynamicTpProperties, copy);
+        beanFactory.registerSingleton("dynamicTpPropertiesHolder", new DynamicTpPropertiesHolder(copy));
         dynamicTpProperties.getExecutors().forEach(each -> registerBean(beanFactory, each));
         log.info("Dynamic ThreadPool Executors registered successfully at {}", event.getTimestamp());
     }
