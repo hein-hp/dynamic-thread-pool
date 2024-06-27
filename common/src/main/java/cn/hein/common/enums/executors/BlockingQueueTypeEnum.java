@@ -1,6 +1,6 @@
-package cn.hein.core.common.enums.executors;
+package cn.hein.common.enums.executors;
 
-import cn.hein.core.queue.ResizeLinkedBlockingQueue;
+import cn.hein.common.queue.ResizeLinkedBlockingQueue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

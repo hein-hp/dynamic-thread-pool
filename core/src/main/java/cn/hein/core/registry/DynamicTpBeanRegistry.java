@@ -1,10 +1,10 @@
 package cn.hein.core.registry;
 
-import cn.hein.core.common.enums.executors.BlockingQueueTypeEnum;
-import cn.hein.core.common.enums.executors.RejectionPolicyTypeEnum;
-import cn.hein.core.dynamic.DynamicTpExecutor;
+import cn.hein.common.enums.executors.BlockingQueueTypeEnum;
+import cn.hein.common.enums.executors.RejectionPolicyTypeEnum;
+import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.properties.DynamicTpProperties;
-import cn.hein.core.toolkit.TimeUnitConvertUtil;
+import cn.hein.common.toolkit.TimeUnitConvertUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;

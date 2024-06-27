@@ -2,7 +2,7 @@ package cn.hein.core.publisher;
 
 import cn.hein.core.event.DynamicTpRefreshEvent;
 import cn.hein.core.properties.DynamicTpProperties;
-import cn.hein.core.toolkit.StringUtil;
+import cn.hein.common.toolkit.StringUtil;
 import com.alibaba.cloud.nacos.NacosConfigManager;
 import com.alibaba.nacos.api.config.listener.Listener;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import static cn.hein.core.common.constant.config.NacosConfigPrefixConstant.DYNAMIC;
-import static cn.hein.core.common.constant.config.NacosConfigPrefixConstant.THREAD_POOL;
-import static cn.hein.core.toolkit.YamlUtil.convertWithoutPrefix;
+import static cn.hein.common.constant.executor.NacosConfigPrefixConstant.DYNAMIC;
+import static cn.hein.common.constant.executor.NacosConfigPrefixConstant.THREAD_POOL;
+import static cn.hein.common.toolkit.YamlUtil.convertWithoutPrefix;
 
 /**
  * Publishes a Dynamic ThreadPool refresh event upon configuration changes in Nacos.

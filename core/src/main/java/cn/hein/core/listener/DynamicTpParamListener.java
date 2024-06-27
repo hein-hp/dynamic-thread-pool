@@ -1,14 +1,14 @@
 package cn.hein.core.listener;
 
-import cn.hein.core.common.enums.executors.RejectionPolicyTypeEnum;
-import cn.hein.core.dynamic.DynamicTpExecutor;
+import cn.hein.common.enums.executors.RejectionPolicyTypeEnum;
+import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.event.DynamicTpRefreshEvent;
 import cn.hein.core.properties.DynamicTpProperties;
 import cn.hein.core.properties.DynamicTpPropertiesHolder;
 import cn.hein.core.properties.ExecutorProperties;
-import cn.hein.core.queue.ResizeLinkedBlockingQueue;
-import cn.hein.core.toolkit.ThreadPoolInfoPrinter;
-import cn.hein.core.toolkit.TimeUnitConvertUtil;
+import cn.hein.common.queue.ResizeLinkedBlockingQueue;
+import cn.hein.common.toolkit.ThreadPoolInfoPrinter;
+import cn.hein.common.toolkit.TimeUnitConvertUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;

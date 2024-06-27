@@ -1,4 +1,4 @@
-package cn.hein.core.queue;
+package cn.hein.common.queue;
 
 import java.util.AbstractQueue;
 import java.util.Collection;

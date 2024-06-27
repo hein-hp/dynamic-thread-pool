@@ -1,4 +1,4 @@
-package cn.hein.core.toolkit;
+package cn.hein.common.toolkit;
 
 import cn.hutool.core.util.StrUtil;
 

@@ -1,13 +1,13 @@
-package cn.hein.core.toolkit;
+package cn.hein.common.toolkit;
 
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.*;
 
-import static cn.hein.core.toolkit.StringUtil.snakeCaseToCamelCase;
+import static cn.hein.common.toolkit.StringUtil.snakeCaseToCamelCase;
 
 /**
- * Yaml 工具类
+ * Utility class for yaml manipulation.
  *
  * @author hein
  */

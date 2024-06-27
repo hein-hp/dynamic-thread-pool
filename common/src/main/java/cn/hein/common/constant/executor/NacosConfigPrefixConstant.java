@@ -1,4 +1,4 @@
-package cn.hein.core.common.constant.config;
+package cn.hein.common.constant.executor;
 
 /**
  * Nacos Config Prefix

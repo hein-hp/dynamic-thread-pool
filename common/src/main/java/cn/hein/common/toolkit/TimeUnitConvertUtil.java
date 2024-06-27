@@ -1,4 +1,4 @@
-package cn.hein.core.toolkit;
+package cn.hein.common.toolkit;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
