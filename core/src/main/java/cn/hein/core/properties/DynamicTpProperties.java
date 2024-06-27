@@ -7,32 +7,32 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 /**
- * 动态线程池配置类
+ * Configuration properties class for Dynamic Thread Pools.
  *
  * @author hein
  */
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "dynamic.thread-pool")
-public class DynamicThreadPoolProperties {
+public class DynamicTpProperties {
 
     /**
-     * 是否开启动态线程池
+     * Whether to enable dynamic thread pools.
      */
     private boolean enable;
 
     /**
-     * 告警平台
+     * Alarm platform configurations.
      */
     private List<PlatformProperties> platforms;
 
     /**
-     * 动态线程池配置
+     * Configurations for individual executors within dynamic thread pools.
      */
     private List<ExecutorProperties> executors;
 
     /**
-     * 日志输出
+     * Logging configurations for dynamic thread pool activities.
      */
     private LogProperties log;
 }

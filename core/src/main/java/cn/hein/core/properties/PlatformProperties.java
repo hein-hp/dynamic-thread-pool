@@ -3,7 +3,7 @@ package cn.hein.core.properties;
 import lombok.Data;
 
 /**
- * 告警平台配置类
+ * Configuration properties class for alarm platforms.
  *
  * @author hein
  */
@@ -11,12 +11,12 @@ import lombok.Data;
 public class PlatformProperties {
 
     /**
-     * 告警平台（目前仅支持 email）
+     * Alarm notification platform (currently supports email only).
      */
     private String platform;
 
     /**
-     * 接受人邮箱
+     * Recipient's email address.
      */
     private String receiveEmail;
 }

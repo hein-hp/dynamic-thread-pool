@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 动态线程池参数配置类
+ * Configuration properties class for individual Executor settings within dynamic thread pools.
  *
  * @author hein
  */
@@ -13,67 +13,72 @@ import java.util.List;
 public class ExecutorProperties {
 
     /**
-     * 线程池名称
+     * The name of the thread pool.
      */
     private String threadPoolName;
 
     /**
-     * 核心线程数
+     * Core pool size of threads.
      */
     private int corePoolSize;
 
     /**
-     * 最大线程数
+     * Maximum pool size of threads.
      */
     private int maximumPoolSize;
 
     /**
-     * 阻塞队列类型
+     * Type of the blocking queue.
      */
     private String queueType;
 
     /**
-     * 阻塞队列容量
+     * Capacity of the blocking queue.
      */
     private int queueCapacity;
 
     /**
-     * 线程空闲时间
+     * Keep-alive time for idle threads.
      */
     private int keepAliveTime;
 
     /**
-     * 时间单位
+     * Time unit for the keep-alive time.
      */
     private String timeUnit;
 
     /**
-     * 是否允许核心线程超时
+     * Whether core threads can time out.
      */
     private boolean allowCoreThreadTimeout;
 
     /**
-     * 拒绝策略
+     * Rejected execution handler policy.
      */
     private String rejectedExecutionHandler;
 
     /**
-     * 线程名称前缀
+     * Prefix for naming threads.
      */
     private String executorNamePrefix;
 
     /**
-     * 是否开启告警
+     * Whether to enable alert notifications.
      */
     private boolean notifyEnable;
 
     /**
-     * 告警平台
+     * Notification platform configuration.
      */
     private String notifyPlatform;
 
     /**
-     * 告警配置
+     * Detailed notification item configurations.
      */
     private List<NotifyItemProperties> notifyItem;
+
+    /**
+     * Bean name in the Spring context.
+     */
+    private String beanName;
 }
