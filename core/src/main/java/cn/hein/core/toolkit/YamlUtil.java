@@ -16,12 +16,12 @@ public class YamlUtil {
     private static final Yaml instance = new Yaml();
 
     /**
-     * 将给定的 yaml 字符串内容转换为指定类类型的对象实例。
+     * Converts the given YAML string content into an object instance of the specified class type.
      *
-     * @param <T>     目标对象的类型参数。
-     * @param content yaml 格式的字符串内容，需要被转换。
-     * @param clazz   目标类的 Class 对象，用于指定转换的目标类型。
-     * @return 转换后的对象实例，其类型与提供的 clazz 参数匹配。
+     * @param <T>     The type parameter of the target object.
+     * @param content The YAML formatted string content to be converted.
+     * @param clazz   The Class object of the target, specifying the type to convert to.
+     * @return An object instance converted, matching the type specified by clazz.
      */
     public static <T> T convert(String content, Class<T> clazz) {
         Map<String, Object> converted = new HashMap<>();
@@ -30,14 +30,15 @@ public class YamlUtil {
     }
 
     /**
-     * 将给定的 yaml 字符串内容转换为指定类类型的对象实例，并在转换前从所有键名中移除指定的前缀。
+     * Converts the given YAML string content into an object instance of the specified class type,
+     * removing specified prefixes from all keys before conversion.
      *
-     * @param <T>     目标对象的类型参数。
-     * @param content yaml 格式的字符串内容，待转换。
-     * @param clazz   目标类的 class 对象，指明要转换成的类型。
-     * @param prefix  一个或多个驼峰命名的字符串，表示要从键名中移除的前缀。
-     *                如果有多个前缀，所有指定的前缀都将尝试从键名中移除。
-     * @return 转换并处理后的对象实例，符合 clazz 指定的类型。
+     * @param <T>     The type parameter of the target object.
+     * @param content The YAML formatted string content to be converted.
+     * @param clazz   The Class object of the target, indicating the type to convert to.
+     * @param prefix  One or more camelCase strings representing prefixes to remove from keys.
+     *                If multiple prefixes are provided, all will be attempted to be removed from keys.
+     * @return A converted and processed object instance, conforming to the type specified by clazz.
      */
     public static <T> T convertWithoutPrefix(String content, Class<T> clazz, String... prefix) {
         Map<String, Object> convertedMap = new HashMap<>();
