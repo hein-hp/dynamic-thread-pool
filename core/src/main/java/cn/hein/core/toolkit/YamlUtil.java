@@ -42,7 +42,6 @@ public class YamlUtil {
     public static <T> T convertWithoutPrefix(String content, Class<T> clazz, String... prefix) {
         Map<String, Object> convertedMap = new HashMap<>();
         convertKeysToCamelCase(instance.load(content), convertedMap);
-        System.out.println("convertedMap = " + convertedMap);
         return instance.loadAs(removePrefix(instance.dump(convertedMap), prefix), clazz);
     }
 
