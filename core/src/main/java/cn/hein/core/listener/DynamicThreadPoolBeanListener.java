@@ -5,7 +5,7 @@ import cn.hein.core.common.enums.executors.RejectionPolicyTypeEnum;
 import cn.hein.core.dynamic.DynamicThreadPoolExecutor;
 import cn.hein.core.properties.DynamicThreadPoolProperties;
 import cn.hein.core.properties.ExecutorProperties;
-import cn.hein.core.toolkit.TimeUnitConverter;
+import cn.hein.core.toolkit.TimeUnitConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -44,7 +44,7 @@ public class DynamicThreadPoolBeanListener implements ApplicationListener<Applic
                 properties.getCorePoolSize(),
                 properties.getMaximumPoolSize(),
                 properties.getKeepAliveTime(),
-                TimeUnitConverter.convert(properties.getTimeUnit()),
+                TimeUnitConvertUtil.convert(properties.getTimeUnit()),
                 BlockingQueueTypeEnum.getBlockingQueue(properties.getQueueType(), properties.getQueueCapacity()),
                 RejectionPolicyTypeEnum.getRejectionPolicy(properties.getRejectedExecutionHandler())
         ));

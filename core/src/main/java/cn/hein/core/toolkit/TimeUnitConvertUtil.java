@@ -4,11 +4,11 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * TimeUnit 转换类
+ * TimeUnit 转换工具类
  *
  * @author hein
  */
-public class TimeUnitConverter {
+public class TimeUnitConvertUtil {
 
     private static final Map<String, TimeUnit> timeUnitMap = Map.of(
             "seconds", TimeUnit.SECONDS,
