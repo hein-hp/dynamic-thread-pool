@@ -1,7 +1,7 @@
 package cn.hein.core.listener;
 
-import cn.hein.core.common.enums.dynamic.BlockingQueueTypeEnum;
-import cn.hein.core.common.enums.dynamic.RejectionPolicyTypeEnum;
+import cn.hein.core.common.enums.executors.BlockingQueueTypeEnum;
+import cn.hein.core.common.enums.executors.RejectionPolicyTypeEnum;
 import cn.hein.core.dynamic.DynamicThreadPoolExecutor;
 import cn.hein.core.properties.DynamicThreadPoolProperties;
 import cn.hein.core.properties.ExecutorProperties;

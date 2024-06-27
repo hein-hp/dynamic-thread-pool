@@ -1,4 +1,4 @@
-package cn.hein.core.common.enums.dynamic;
+package cn.hein.core.common.enums.executors;
 
 import cn.hein.core.queue.ResizeLinkedBlockingQueue;
 import lombok.AllArgsConstructor;
