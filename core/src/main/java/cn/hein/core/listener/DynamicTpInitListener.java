@@ -2,8 +2,8 @@ package cn.hein.core.listener;
 
 import cn.hein.core.common.enums.executors.BlockingQueueTypeEnum;
 import cn.hein.core.common.enums.executors.RejectionPolicyTypeEnum;
-import cn.hein.core.dynamic.DynamicThreadPoolExecutor;
-import cn.hein.core.properties.DynamicThreadPoolProperties;
+import cn.hein.core.dynamic.DynamicTpExecutor;
+import cn.hein.core.properties.DynamicTpProperties;
 import cn.hein.core.properties.ExecutorProperties;
 import cn.hein.core.toolkit.TimeUnitConvertUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -14,32 +14,33 @@ import org.springframework.context.ApplicationListener;
 import static cn.hein.core.toolkit.StringUtil.snakeCaseToCamelCase;
 
 /**
- * 动态线程池注册 Bean 监听器
+ * Listener responsible for registering dynamic thread pool beans upon application readiness.
  *
  * @author hein
  */
 @Slf4j
-public class DynamicThreadPoolBeanListener implements ApplicationListener<ApplicationReadyEvent> {
+public class DynamicTpInitListener implements ApplicationListener<ApplicationReadyEvent> {
 
-    private final DynamicThreadPoolProperties dynamicThreadPoolProperties;
+    private final DynamicTpProperties dynamicTpProperties;
 
-    public DynamicThreadPoolBeanListener(DynamicThreadPoolProperties dynamicThreadPoolProperties) {
-        this.dynamicThreadPoolProperties = dynamicThreadPoolProperties;
+    public DynamicTpInitListener(DynamicTpProperties dynamicTpProperties) {
+        this.dynamicTpProperties = dynamicTpProperties;
     }
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         ConfigurableListableBeanFactory beanFactory = event.getApplicationContext().getBeanFactory();
-        dynamicThreadPoolProperties.getExecutors().forEach(each -> registerBean(beanFactory, each));
+        dynamicTpProperties.getExecutors().forEach(each -> registerBean(beanFactory, each));
         log.info("Dynamic ThreadPool Executors registered successfully at {}", event.getTimestamp());
     }
 
     private void registerBean(ConfigurableListableBeanFactory beanFactory, ExecutorProperties properties) {
         String beanName = snakeCaseToCamelCase(properties.getThreadPoolName());
+        properties.setBeanName(beanName);
         if (beanFactory.containsBean(beanName)) {
             return;
         }
-        beanFactory.registerSingleton(beanName, new DynamicThreadPoolExecutor(
+        beanFactory.registerSingleton(beanName, new DynamicTpExecutor(
                 properties.getThreadPoolName(),
                 properties.getCorePoolSize(),
                 properties.getMaximumPoolSize(),
