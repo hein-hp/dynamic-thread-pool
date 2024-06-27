@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.concurrent.*;
 
 /**
- * 阻塞队列枚举类
+ * Enumeration class for blocking queue types.
  *
  * @author hein
  */
@@ -41,16 +41,24 @@ public enum BlockingQueueTypeEnum {
     RESIZE_LINKED_BLOCKING_QUEUE("ResizeLinkedBlockingQueue", ResizeLinkedBlockingQueue.class);
 
     /**
-     * 阻塞队列名称
+     * The name of the blocking queue.
      */
     private final String name;
 
     /**
-     * 阻塞队列类型
+     * The class type of the blocking queue.
      */
     @SuppressWarnings("rawtypes")
     private final Class<? extends BlockingQueue> queueClass;
 
+    /**
+     * Retrieves a blocking queue instance based on the provided name and capacity.
+     *
+     * @param name     The name identifying the queue type.
+     * @param capacity The initial capacity of the queue.
+     * @return An instance of the specified blocking queue.
+     * @throws IllegalArgumentException If the queue type is unknown.
+     */
     public static BlockingQueue<Runnable> getBlockingQueue(String name, int capacity) {
         for (BlockingQueueTypeEnum type : BlockingQueueTypeEnum.values()) {
             if (type.name.equalsIgnoreCase(name)) {
@@ -60,6 +68,14 @@ public enum BlockingQueueTypeEnum {
         throw new IllegalArgumentException("Unknown blocking queue type: " + name);
     }
 
+    /**
+     * Creates an instance of the blocking queue using reflection based on the provided class type and capacity.
+     *
+     * @param queueClass The class type of the queue to be instantiated.
+     * @param capacity   The capacity for the queue.
+     * @return An instance of the blocking queue.
+     * @throws IllegalArgumentException If the queue type is unsupported.
+     */
     @SuppressWarnings("rawtypes")
     private static BlockingQueue<Runnable> createQueue(Class<? extends BlockingQueue> queueClass, int capacity) {
         try {

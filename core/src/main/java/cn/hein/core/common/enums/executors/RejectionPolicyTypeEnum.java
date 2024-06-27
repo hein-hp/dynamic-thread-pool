@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.util.concurrent.*;
 
 /**
- * 拒绝策略枚举类
+ * Enumeration class for thread pool rejection policies.
  *
  * @author hein
  */
@@ -15,35 +15,42 @@ import java.util.concurrent.*;
 public enum RejectionPolicyTypeEnum {
 
     /**
-     * ABORT
+     * Abort policy
      */
-    ABORT("ABORT", new ThreadPoolExecutor.AbortPolicy()),
+    ABORT("Abort", new ThreadPoolExecutor.AbortPolicy()),
 
     /**
-     * DISCARD
+     * Discard policy
      */
-    DISCARD("DISCARD", new ThreadPoolExecutor.DiscardPolicy()),
+    DISCARD("Discard", new ThreadPoolExecutor.DiscardPolicy()),
 
     /**
-     * DISCARD_OLDEST
+     * Discard the oldest policy
      */
-    DISCARD_OLDEST("DISCARD_OLDEST", new ThreadPoolExecutor.DiscardOldestPolicy()),
+    DISCARD_OLDEST("DiscardOldest", new ThreadPoolExecutor.DiscardOldestPolicy()),
 
     /**
-     * CALLER_RUNS
+     * Caller runs policy
      */
-    CALLER_RUNS("CALLER_RUNS", new ThreadPoolExecutor.CallerRunsPolicy());
+    CALLER_RUNS("CallerRuns", new ThreadPoolExecutor.CallerRunsPolicy());
 
     /**
-     * 拒绝策略名称
+     * The name of the rejection policy.
      */
     private final String name;
 
     /**
-     * 拒绝策略类型
+     * The instance of the rejection handler.
      */
     private final RejectedExecutionHandler handler;
 
+    /**
+     * Retrieves a rejection policy instance based on the provided name.
+     *
+     * @param name The name identifying the rejection policy.
+     * @return An instance of the specified rejection policy.
+     * @throws IllegalArgumentException If the policy type is unknown.
+     */
     public static RejectedExecutionHandler getRejectionPolicy(String name) {
         for (RejectionPolicyTypeEnum type : RejectionPolicyTypeEnum.values()) {
             if (type.name.equalsIgnoreCase(name)) {
