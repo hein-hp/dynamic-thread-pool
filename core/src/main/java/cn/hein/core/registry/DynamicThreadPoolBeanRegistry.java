@@ -32,7 +32,7 @@ public class DynamicThreadPoolBeanRegistry implements BeanDefinitionRegistryPost
 
     private void registerThreadPoolBeans(GenericApplicationContext context) {
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getBeanFactory();
-        dynamicThreadPoolProperties.getExecutorProperties()
+        dynamicThreadPoolProperties.getExecutors()
                 .stream()
                 .filter(each -> beanFactory.containsBeanDefinition(each.getThreadPoolName())).forEach(each -> {
                     BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(DynamicThreadPoolExecutor.class)

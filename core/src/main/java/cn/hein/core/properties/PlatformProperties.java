@@ -18,5 +18,5 @@ public class PlatformProperties {
     /**
      * 接受人邮箱
      */
-    private String reviveEmail;
+    private String receiveEmail;
 }

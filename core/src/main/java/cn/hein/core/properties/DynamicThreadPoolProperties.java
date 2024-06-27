@@ -24,15 +24,15 @@ public class DynamicThreadPoolProperties {
     /**
      * 告警平台
      */
-    private List<PlatformProperties> platformProperties;
+    private List<PlatformProperties> platforms;
 
     /**
      * 动态线程池配置
      */
-    private List<ExecutorProperties> executorProperties;
+    private List<ExecutorProperties> executors;
 
     /**
      * 日志输出
      */
-    private LogProperties logProperties;
+    private LogProperties log;
 }
