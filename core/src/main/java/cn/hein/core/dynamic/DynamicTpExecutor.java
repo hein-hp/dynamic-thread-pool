@@ -4,13 +4,13 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * 动态线程池
+ * A dynamically configurable ThreadPoolExecutor.
  *
  * @author hein
  */
-public class DynamicThreadPoolExecutor extends ThreadPoolExecutor {
+public class DynamicTpExecutor extends ThreadPoolExecutor {
 
-    public DynamicThreadPoolExecutor(
+    public DynamicTpExecutor(
             String executorNamePrefix,
             int corePoolSize,
             int maximumPoolSize,
@@ -18,26 +18,27 @@ public class DynamicThreadPoolExecutor extends ThreadPoolExecutor {
             TimeUnit unit,
             BlockingQueue<Runnable> workQueue,
             RejectedExecutionHandler handler) {
-        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, new NamedThreadFactory(executorNamePrefix), handler);
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, new NamedThreadFactory(executorNamePrefix, 0L), handler);
     }
 
     /**
-     * 命名线程工厂
+     * Custom thread factory that names threads with a given prefix.
      */
-    private static class NamedThreadFactory implements ThreadFactory {
+    public static class NamedThreadFactory implements ThreadFactory {
 
         /**
-         * 线程名称前缀
+         * Prefix for the thread's name.
          */
         private final String prefix;
 
         /**
-         * 计数器
+         * Counter for generating unique thread IDs.
          */
-        private final AtomicLong id = new AtomicLong(0);
+        private final AtomicLong id;
 
-        public NamedThreadFactory(String prefix) {
+        public NamedThreadFactory(String prefix, Long startId) {
             this.prefix = prefix;
+            id = new AtomicLong(startId);
         }
 
         @Override
