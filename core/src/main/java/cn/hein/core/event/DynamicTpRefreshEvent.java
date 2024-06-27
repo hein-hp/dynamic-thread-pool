@@ -10,17 +10,17 @@ import org.springframework.context.ApplicationEvent;
  * @author hein
  */
 @Getter
-public class DynamicTpExecutorRefreshEvent extends ApplicationEvent {
+public class DynamicTpRefreshEvent extends ApplicationEvent {
 
     private final DynamicTpProperties message;
 
     /**
-     * Constructs a new DynamicTpExecutorRefreshEvent.
+     * Constructs a new DynamicTpRefreshEvent.
      *
      * @param source     the object on which the event initially occurred or with which the event is associated (never {@code null})
      * @param properties the dynamic thread pool properties that triggered the refresh (never {@code null})
      */
-    public DynamicTpExecutorRefreshEvent(Object source, DynamicTpProperties properties) {
+    public DynamicTpRefreshEvent(Object source, DynamicTpProperties properties) {
         super(source);
         this.message = properties;
     }
