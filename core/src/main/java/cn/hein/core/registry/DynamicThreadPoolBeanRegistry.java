@@ -15,10 +15,11 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.PriorityOrdered;
 
 /**
- * 动态线程池 Bean 注册器
+ * 动态线程池 Bean 注册器（不可用，废弃）
  *
  * @author hein
  */
+@Deprecated
 public class DynamicThreadPoolBeanRegistry implements BeanDefinitionRegistryPostProcessor, PriorityOrdered {
 
     /**

@@ -1,8 +1,7 @@
 package cn.hein.core.config;
 
+import cn.hein.core.listener.DynamicThreadPoolBeanListener;
 import cn.hein.core.properties.DynamicThreadPoolProperties;
-import cn.hein.core.registry.DynamicThreadPoolBeanRegistry;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,15 +11,12 @@ import org.springframework.context.annotation.Configuration;
  * @author hein
  */
 @Configuration
-@RequiredArgsConstructor
 public class ThreadPoolConfig {
 
-    private final DynamicThreadPoolProperties dynamicThreadPoolProperties;
-
     @Bean
-    public DynamicThreadPoolBeanRegistry dynamicThreadPoolBeanRegistry() {
+    public DynamicThreadPoolBeanListener dynamicThreadPoolBeanListener(DynamicThreadPoolProperties dynamicThreadPoolProperties) {
         if (dynamicThreadPoolProperties.isEnable()) {
-            return new DynamicThreadPoolBeanRegistry(dynamicThreadPoolProperties);
+            return new DynamicThreadPoolBeanListener(dynamicThreadPoolProperties);
         } else {
             return null;
         }
