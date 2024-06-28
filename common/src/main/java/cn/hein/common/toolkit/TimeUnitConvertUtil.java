@@ -12,13 +12,13 @@ public class TimeUnitConvertUtil {
 
     // Immutable map for efficient lookups, mapping lowercase unit names to TimeUnit enums.
     private static final Map<String, TimeUnit> timeUnitMap = Map.of(
-            "seconds", TimeUnit.SECONDS,
-            "minutes", TimeUnit.MINUTES,
-            "hours", TimeUnit.HOURS,
-            "days", TimeUnit.DAYS,
-            "milliseconds", TimeUnit.MILLISECONDS,
-            "microseconds", TimeUnit.MICROSECONDS,
-            "nanoseconds", TimeUnit.NANOSECONDS
+            "SECONDS", TimeUnit.SECONDS,
+            "MINUTES", TimeUnit.MINUTES,
+            "HOURS", TimeUnit.HOURS,
+            "DAYS", TimeUnit.DAYS,
+            "MILLISECONDS", TimeUnit.MILLISECONDS,
+            "MICROSECONDS", TimeUnit.MICROSECONDS,
+            "NANOSECONDS", TimeUnit.NANOSECONDS
     );
 
     /**
@@ -29,7 +29,7 @@ public class TimeUnitConvertUtil {
      * @throws IllegalArgumentException If the provided unit name does not correspond to a known time unit.
      */
     public static TimeUnit convert(String unitName) {
-        TimeUnit timeUnit = timeUnitMap.get(unitName);
+        TimeUnit timeUnit = timeUnitMap.get(unitName.toUpperCase());
         if (timeUnit == null) {
             throw new IllegalArgumentException("Unknown time unit: " + unitName);
         }
