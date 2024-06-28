@@ -19,4 +19,14 @@ public class PlatformProperties {
      * Alarm notification recipient.
      */
     private String receiver;
+
+    /**
+     * Alarm notification interval.
+     */
+    private String notifyInterval;
+
+    /**
+     * Alarm notification interval unit.
+     */
+    private String notifyTimeUnit;
 }

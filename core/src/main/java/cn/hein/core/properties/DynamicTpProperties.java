@@ -27,6 +27,21 @@ public class DynamicTpProperties {
     private boolean change;
 
     /**
+     * Whether to enable monitor.
+     */
+    private boolean monitorEnable;
+
+    /**
+     * Interval for monitor metric data.
+     */
+    private int monitorInterval;
+
+    /**
+     * Time unit for monitor metric data.
+     */
+    private String monitorTimeUnit;
+
+    /**
      * Alarm platform configurations.
      */
     private List<PlatformProperties> platforms;
@@ -35,9 +50,4 @@ public class DynamicTpProperties {
      * Configurations for individual executors within dynamic thread pools.
      */
     private List<ExecutorProperties> executors;
-
-    /**
-     * Logging configurations for dynamic thread pool activities.
-     */
-    private LogProperties log;
 }

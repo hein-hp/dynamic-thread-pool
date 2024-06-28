@@ -63,6 +63,11 @@ public class ExecutorProperties {
     private String executorNamePrefix;
 
     /**
+     * Detailed notification item configurations.
+     */
+    private List<NotifyItemProperties> notifyItem;
+
+    /**
      * Whether to enable alert notifications.
      */
     private boolean notifyEnable;
@@ -71,11 +76,6 @@ public class ExecutorProperties {
      * Notification platform configuration.
      */
     private String notifyPlatform;
-
-    /**
-     * Detailed notification item configurations.
-     */
-    private List<NotifyItemProperties> notifyItem;
 
     /**
      * Bean name in the Spring context.
