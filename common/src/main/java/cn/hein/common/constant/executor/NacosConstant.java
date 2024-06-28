@@ -9,5 +9,5 @@ public class NacosConstant {
 
     public static final String DYNAMIC = "dynamic";
 
-    public static final String THREAD_POOL = "threadPool";
+    public static final String THREAD_POOL = "thread-pool";
 }
