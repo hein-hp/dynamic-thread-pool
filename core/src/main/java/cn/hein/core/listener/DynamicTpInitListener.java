@@ -46,7 +46,7 @@ public class DynamicTpInitListener implements ApplicationListener<ApplicationRea
             return;
         }
         beanFactory.registerSingleton(beanName, new DynamicTpExecutor(
-                properties.getThreadPoolName(),
+                properties.getExecutorNamePrefix(),
                 properties.getCorePoolSize(),
                 properties.getMaximumPoolSize(),
                 properties.getKeepAliveTime(),
