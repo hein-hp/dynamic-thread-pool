@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import static cn.hein.common.constant.executor.NacosConfigPrefixConstant.DYNAMIC;
-import static cn.hein.common.constant.executor.NacosConfigPrefixConstant.THREAD_POOL;
+import static cn.hein.common.constant.executor.NacosConstant.DYNAMIC;
+import static cn.hein.common.constant.executor.NacosConstant.THREAD_POOL;
 import static cn.hein.common.toolkit.StringUtil.kebabCaseToCamelCase;
 import static cn.hein.common.toolkit.YamlUtil.convertWithoutPrefix;
 

@@ -1,11 +1,11 @@
 package cn.hein.common.constant.executor;
 
 /**
- * Nacos Config Prefix
+ * Nacos Config Constant
  *
  * @author hein
  */
-public class NacosConfigPrefixConstant {
+public class NacosConstant {
 
     public static final String DYNAMIC = "dynamic";
 
