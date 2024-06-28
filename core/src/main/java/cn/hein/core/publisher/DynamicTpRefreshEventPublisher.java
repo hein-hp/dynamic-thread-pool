@@ -1,13 +1,16 @@
 package cn.hein.core.publisher;
 
+import cn.hein.common.spring.ApplicationContextHolder;
+import cn.hein.common.toolkit.ThreadPoolInfoPrinter;
 import cn.hein.core.event.DynamicTpRefreshEvent;
+import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.properties.DynamicTpProperties;
 import com.alibaba.cloud.nacos.NacosConfigManager;
 import com.alibaba.nacos.api.config.listener.Listener;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -26,17 +29,20 @@ import static cn.hein.common.toolkit.YamlUtil.convertWithoutPrefix;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
-public class DynamicTpRefreshEventPublisher implements InitializingBean {
+public class DynamicTpRefreshEventPublisher extends AbstractEventPublisher implements InitializingBean {
 
     private final NacosConfigManager nacosConfigManager;
-    private final ApplicationEventPublisher publisher;
 
     @Value("${spring.cloud.nacos.config.name}")
     private String dataId; // Nacos configuration file ID
 
     @Value("${spring.cloud.nacos.config.group}")
     private String group; // Nacos configuration group
+
+    public DynamicTpRefreshEventPublisher(ApplicationEventPublisher publisher, NacosConfigManager nacosConfigManager) {
+        super(publisher);
+        this.nacosConfigManager = nacosConfigManager;
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -52,8 +58,18 @@ public class DynamicTpRefreshEventPublisher implements InitializingBean {
                 // When the configuration changes, publish a Dynamic ThreadPool refresh event
                 DynamicTpProperties message = convertWithoutPrefix(configInfo, DynamicTpProperties.class, DYNAMIC, THREAD_POOL);
                 message.getExecutors().forEach(executor -> executor.setBeanName(kebabCaseToCamelCase(executor.getThreadPoolName())));
-                publisher.publishEvent(new DynamicTpRefreshEvent(this, message));
+                System.out.println("before");
+                DynamicTpExecutor bean = ApplicationContextHolder.getBean(DynamicTpExecutor.class);
+                ThreadPoolInfoPrinter.printThreadPoolInfo(bean);
+                publishEvent(message);
+                System.out.println("after");
+                ThreadPoolInfoPrinter.printThreadPoolInfo(bean);
             }
         });
+    }
+
+    @Override
+    protected ApplicationEvent buildEvent(Object source) {
+        return new DynamicTpRefreshEvent(this, (DynamicTpProperties) source);
     }
 }

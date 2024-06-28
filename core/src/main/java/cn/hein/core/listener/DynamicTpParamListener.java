@@ -2,7 +2,6 @@ package cn.hein.core.listener;
 
 import cn.hein.common.enums.executors.RejectionPolicyTypeEnum;
 import cn.hein.common.queue.ResizeLinkedBlockingQueue;
-import cn.hein.common.toolkit.ThreadPoolInfoPrinter;
 import cn.hein.common.toolkit.TimeUnitConvertUtil;
 import cn.hein.core.event.DynamicTpRefreshEvent;
 import cn.hein.core.executor.DynamicTpExecutor;
@@ -37,14 +36,11 @@ public class DynamicTpParamListener implements ApplicationListener<DynamicTpRefr
         Map<String, ExecutorProperties> executorMap = dynamicTpPropertiesHolder.getDynamicTpProperties().getExecutors().stream()
                 .collect(Collectors.toMap(ExecutorProperties::getBeanName, v -> v));
         for (ExecutorProperties prop : properties.getExecutors()) {
-            DynamicTpExecutor executor = getBean(prop.getBeanName(), DynamicTpExecutor.class);
-            ThreadPoolInfoPrinter.printThreadPoolInfo(executor);
             try {
                 refreshExecutorProperties(prop, executorMap.get(prop.getBeanName()));
             } catch (IllegalAccessException e) {
                 log.error("Failed to refresh dynamic thread pool parameters.", e);
             }
-            ThreadPoolInfoPrinter.printThreadPoolInfo(executor);
         }
     }
 
