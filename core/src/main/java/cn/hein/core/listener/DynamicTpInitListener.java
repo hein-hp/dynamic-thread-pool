@@ -13,7 +13,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 
-import static cn.hein.common.toolkit.StringUtil.snakeCaseToCamelCase;
+import static cn.hein.common.toolkit.StringUtil.kebabCaseToCamelCase;
 
 /**
  * Listener responsible for registering dynamic thread pool beans upon application readiness.
@@ -40,7 +40,7 @@ public class DynamicTpInitListener implements ApplicationListener<ApplicationRea
     }
 
     private void registerBean(ConfigurableListableBeanFactory beanFactory, ExecutorProperties properties) {
-        String beanName = snakeCaseToCamelCase(properties.getThreadPoolName());
+        String beanName = kebabCaseToCamelCase(properties.getThreadPoolName());
         properties.setBeanName(beanName);
         if (beanFactory.containsBean(beanName)) {
             return;

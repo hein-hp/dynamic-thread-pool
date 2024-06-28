@@ -4,7 +4,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.util.*;
 
-import static cn.hein.common.toolkit.StringUtil.snakeCaseToCamelCase;
+import static cn.hein.common.toolkit.StringUtil.kebabCaseToCamelCase;
 
 /**
  * Utility class for yaml manipulation.
@@ -69,7 +69,7 @@ public class YamlUtil {
         }
         for (String key : origin.keySet()) {
             Object value = origin.get(key);
-            String camelCaseKey = snakeCaseToCamelCase(key);
+            String camelCaseKey = kebabCaseToCamelCase(key);
             converted.put(camelCaseKey, value);
             if (!key.equals(camelCaseKey)) {
                 converted.remove(key);

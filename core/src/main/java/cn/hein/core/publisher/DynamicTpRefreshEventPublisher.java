@@ -2,7 +2,6 @@ package cn.hein.core.publisher;
 
 import cn.hein.core.event.DynamicTpRefreshEvent;
 import cn.hein.core.properties.DynamicTpProperties;
-import cn.hein.common.toolkit.StringUtil;
 import com.alibaba.cloud.nacos.NacosConfigManager;
 import com.alibaba.nacos.api.config.listener.Listener;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,7 @@ import java.util.concurrent.Executors;
 
 import static cn.hein.common.constant.executor.NacosConfigPrefixConstant.DYNAMIC;
 import static cn.hein.common.constant.executor.NacosConfigPrefixConstant.THREAD_POOL;
+import static cn.hein.common.toolkit.StringUtil.kebabCaseToCamelCase;
 import static cn.hein.common.toolkit.YamlUtil.convertWithoutPrefix;
 
 /**
@@ -51,7 +51,7 @@ public class DynamicTpRefreshEventPublisher implements InitializingBean {
             public void receiveConfigInfo(String configInfo) {
                 // When the configuration changes, publish a Dynamic ThreadPool refresh event
                 DynamicTpProperties message = convertWithoutPrefix(configInfo, DynamicTpProperties.class, DYNAMIC, THREAD_POOL);
-                message.getExecutors().forEach(executor -> executor.setBeanName(StringUtil.snakeCaseToCamelCase(executor.getThreadPoolName())));
+                message.getExecutors().forEach(executor -> executor.setBeanName(kebabCaseToCamelCase(executor.getThreadPoolName())));
                 publisher.publishEvent(new DynamicTpRefreshEvent(this, message));
             }
         });

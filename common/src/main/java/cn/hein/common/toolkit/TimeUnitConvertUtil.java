@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Utility class for converting string representations to {@link TimeUnit} instances.
  *
- * @author Hein
+ * @author hein
  */
 public class TimeUnitConvertUtil {
 
