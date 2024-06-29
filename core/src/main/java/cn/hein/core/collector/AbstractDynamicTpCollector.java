@@ -35,8 +35,8 @@ public abstract class AbstractDynamicTpCollector implements DynamicTpCollector {
             if (!isRunning) {
                 isRunning = true;
                 scheduledFuture = COLLECTOR_EXECUTOR.scheduleAtFixedRate(this::collect, 0,
-                        properties.getMonitorInterval(),
-                        TimeUnitConvertUtil.convert(properties.getMonitorTimeUnit()));
+                        properties.getMonitor().getInterval(),
+                        TimeUnitConvertUtil.convert(properties.getMonitor().getTimeUnit()));
             }
         }
     }

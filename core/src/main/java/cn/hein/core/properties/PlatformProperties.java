@@ -11,7 +11,7 @@ import lombok.Data;
 public class PlatformProperties {
 
     /**
-     * Alarm notification platform (currently supports email only).
+     * Alarm notification platform
      */
     private String platform;
 

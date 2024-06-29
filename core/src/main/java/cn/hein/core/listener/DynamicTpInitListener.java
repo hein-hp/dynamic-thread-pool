@@ -37,7 +37,7 @@ public class DynamicTpInitListener implements ApplicationListener<ApplicationRea
         properties.getExecutors().forEach(each -> registerBean(beanFactory, each));
         log.info("Dynamic ThreadPool Executors registered successfully at {}", event.getTimestamp());
 
-        if (properties.isMonitorEnable()) {
+        if (properties.getMonitor().isEnabled()) {
             context.getBean(DynamicTpCollector.class).start(properties);
         }
     }

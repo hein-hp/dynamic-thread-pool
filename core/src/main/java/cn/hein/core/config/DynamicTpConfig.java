@@ -31,7 +31,7 @@ public class DynamicTpConfig {
     public DynamicTpInitListener dynamicTpInitListener(@NonNull DynamicTpProperties properties) {
         notNull(properties, "DynamicTpProperties must not be null");
 
-        if (properties.isEnable()) {
+        if (properties.isEnabled()) {
             return new DynamicTpInitListener();
         } else {
             log.info("Dynamic thread pools are disabled.");
@@ -52,7 +52,7 @@ public class DynamicTpConfig {
         notNull(properties, "DynamicTpProperties must not be null");
         notNull(context, "ApplicationContext must not be null");
 
-        if (properties.isEnable()) {
+        if (properties.isEnabled()) {
             return new DynamicTpRefreshListener(context);
         } else {
             log.info("Dynamic thread pools are disabled.");
