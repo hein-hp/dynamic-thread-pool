@@ -1,5 +1,6 @@
 package cn.hein.core.collector;
 
+import cn.hein.common.entity.info.DynamicTpCollectInfo;
 import cn.hein.common.spring.ApplicationContextHolder;
 import cn.hein.common.toolkit.TimeUnitConvertUtil;
 import cn.hein.core.executor.DynamicTpExecutor;
@@ -26,7 +27,8 @@ public abstract class AbstractDynamicTpCollector implements DynamicTpCollector {
 
     public void collect() {
         if (isRunning) {
-            getRegisteredExecutors().forEach(this::doCollect);
+            getRegisteredExecutors()
+                    .forEach((beanName, executor) -> publish(doCollect(beanName, executor)));
         }
     }
 
@@ -55,8 +57,16 @@ public abstract class AbstractDynamicTpCollector implements DynamicTpCollector {
      *
      * @param beanName The name of the bean associated with the executor.
      * @param executor The executor to collect metrics from.
+     * @return A DynamicTpCollectInfo object containing the collected metrics.
      */
-    protected abstract void doCollect(String beanName, DynamicTpExecutor executor);
+    protected abstract DynamicTpCollectInfo doCollect(String beanName, DynamicTpExecutor executor);
+
+    /**
+     * Publish the collected metrics.
+     *
+     * @param collectInfo The DynamicTpCollectInfo object containing the collected metrics.
+     */
+    protected abstract void publish(DynamicTpCollectInfo collectInfo);
 
     /**
      * Retrieves a map of all registered DynamicTpExecutor beans.

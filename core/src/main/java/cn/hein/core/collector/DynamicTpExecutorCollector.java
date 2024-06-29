@@ -1,6 +1,9 @@
 package cn.hein.core.collector;
 
+import cn.hein.common.entity.info.DynamicTpCollectInfo;
 import cn.hein.core.executor.DynamicTpExecutor;
+import cn.hein.core.publisher.DynamicTpCollectCompleteEventPublisher;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -12,16 +15,31 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class DynamicTpExecutorCollector extends AbstractDynamicTpCollector {
 
-    /**
-     * Collects information about a specific thread pool.
-     *
-     * @param beanName The name of the bean representing the thread pool.
-     * @param executor The thread pool executor to collect information from.
-     */
+    private final DynamicTpCollectCompleteEventPublisher publisher;
+
     @Override
-    protected void doCollect(String beanName, DynamicTpExecutor executor) {
-        // TODO
+    protected DynamicTpCollectInfo doCollect(String beanName, DynamicTpExecutor executor) {
+        return DynamicTpCollectInfo.builder()
+                .beanName(beanName)
+                .poolSize(executor.getPoolSize())
+                .corePoolSize(executor.getCorePoolSize())
+                .maximumPoolSize(executor.getMaximumPoolSize())
+                .activeCount(executor.getActiveCount())
+                .taskCount(executor.getTaskCount())
+                .completedTaskCount(executor.getCompletedTaskCount())
+                .largestPoolSize(executor.getLargestPoolSize())
+                .queueType(executor.getQueue().getClass().getName())
+                .queueCapacity(executor.getQueue().size())
+                .remainingCapacity(executor.getQueue().remainingCapacity())
+                .handlerType(executor.getRejectedExecutionHandler().getClass().getName())
+                .build();
+    }
+
+    @Override
+    protected void publish(DynamicTpCollectInfo collectInfo) {
+        publisher.publishEvent(collectInfo);
     }
 }
