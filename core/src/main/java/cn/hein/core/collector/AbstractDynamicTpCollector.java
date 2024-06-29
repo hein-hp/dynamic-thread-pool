@@ -36,7 +36,7 @@ public abstract class AbstractDynamicTpCollector implements DynamicTpCollector {
 
     public void start(DynamicTpProperties properties) {
         synchronized (this) {
-            if (!isRunning) {
+            if (!isRunning && enabled(properties)) {
                 isRunning = true;
                 scheduledFuture = COLLECTOR_EXECUTOR.scheduleAtFixedRate(() -> collect(properties), 0,
                         properties.getMonitor().getInterval(),
@@ -69,4 +69,12 @@ public abstract class AbstractDynamicTpCollector implements DynamicTpCollector {
      * @param collectInfo The DynamicTpCollectInfo object containing the collected metrics.
      */
     protected abstract void publish(DynamicTpCollectInfo collectInfo);
+
+    /**
+     * Check if the collector is enabled.
+     *
+     * @param properties The DynamicTpProperties object containing the configuration properties.
+     * @return True if the collector is enabled, false otherwise.
+     */
+    protected abstract boolean enabled(DynamicTpProperties properties);
 }

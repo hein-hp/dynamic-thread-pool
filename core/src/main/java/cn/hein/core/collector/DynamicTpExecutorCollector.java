@@ -2,6 +2,7 @@ package cn.hein.core.collector;
 
 import cn.hein.common.entity.info.DynamicTpCollectInfo;
 import cn.hein.core.executor.DynamicTpExecutor;
+import cn.hein.core.properties.DynamicTpProperties;
 import cn.hein.core.publisher.DynamicTpCollectCompleteEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,5 +42,10 @@ public class DynamicTpExecutorCollector extends AbstractDynamicTpCollector {
     @Override
     protected void publish(DynamicTpCollectInfo collectInfo) {
         publisher.publishEvent(collectInfo);
+    }
+
+    @Override
+    public boolean enabled(DynamicTpProperties properties) {
+        return properties.getMonitor().isEnabled();
     }
 }
