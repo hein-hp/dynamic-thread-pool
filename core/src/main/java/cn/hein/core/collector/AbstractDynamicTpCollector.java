@@ -1,15 +1,15 @@
 package cn.hein.core.collector;
 
 import cn.hein.common.entity.info.DynamicTpCollectInfo;
-import cn.hein.common.spring.ApplicationContextHolder;
 import cn.hein.common.toolkit.TimeUnitConvertUtil;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.properties.DynamicTpProperties;
 
-import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+
+import static cn.hein.common.spring.ApplicationContextHolder.getBean;
 
 /**
  * Abstract base class for dynamic thread pool collectors.
@@ -25,10 +25,12 @@ public abstract class AbstractDynamicTpCollector implements DynamicTpCollector {
     private ScheduledFuture<?> scheduledFuture;
     private volatile boolean isRunning = false;
 
-    public void collect() {
+    public void collect(DynamicTpProperties properties) {
         if (isRunning) {
-            getRegisteredExecutors()
-                    .forEach((beanName, executor) -> publish(doCollect(beanName, executor)));
+            properties.getExecutors()
+                    .stream()
+                    .filter(each -> each.getNotify().isEnabled())
+                    .forEach(each -> publish(doCollect(each.getBeanName(), getBean(each.getBeanName(), DynamicTpExecutor.class))));
         }
     }
 
@@ -36,7 +38,7 @@ public abstract class AbstractDynamicTpCollector implements DynamicTpCollector {
         synchronized (this) {
             if (!isRunning) {
                 isRunning = true;
-                scheduledFuture = COLLECTOR_EXECUTOR.scheduleAtFixedRate(this::collect, 0,
+                scheduledFuture = COLLECTOR_EXECUTOR.scheduleAtFixedRate(() -> collect(properties), 0,
                         properties.getMonitor().getInterval(),
                         TimeUnitConvertUtil.convert(properties.getMonitor().getTimeUnit()));
             }
@@ -67,13 +69,4 @@ public abstract class AbstractDynamicTpCollector implements DynamicTpCollector {
      * @param collectInfo The DynamicTpCollectInfo object containing the collected metrics.
      */
     protected abstract void publish(DynamicTpCollectInfo collectInfo);
-
-    /**
-     * Retrieves a map of all registered DynamicTpExecutor beans.
-     *
-     * @return A map where keys are bean names and values are DynamicTpExecutor instances.
-     */
-    private Map<String, DynamicTpExecutor> getRegisteredExecutors() {
-        return ApplicationContextHolder.getBeansOfType(DynamicTpExecutor.class);
-    }
 }

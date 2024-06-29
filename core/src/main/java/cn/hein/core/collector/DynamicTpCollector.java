@@ -14,15 +14,17 @@ public interface DynamicTpCollector {
     /**
      * Collects metrics from the thread pool.
      * This method should be implemented to perform the actual collection logic.
+     *
+     * @param properties The properties required to configure the collection process.
      */
-    void collect();
+    void collect(DynamicTpProperties properties);
 
     /**
      * Starts the collection process.
      *
-     * @param dynamicTpProperties The properties required to configure the collection process.
+     * @param properties The properties required to configure the collection process.
      */
-    void start(DynamicTpProperties dynamicTpProperties);
+    void start(DynamicTpProperties properties);
 
     /**
      * Stops the collection process.
