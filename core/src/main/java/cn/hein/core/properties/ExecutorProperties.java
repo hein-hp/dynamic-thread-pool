@@ -2,8 +2,6 @@ package cn.hein.core.properties;
 
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * Configuration properties class for individual Executor settings within dynamic thread pools.
  *
