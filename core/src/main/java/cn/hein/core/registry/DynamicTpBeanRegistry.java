@@ -1,71 +1,73 @@
 package cn.hein.core.registry;
 
+import cn.hein.common.entity.properties.DynamicTpProperties;
+import cn.hein.common.entity.properties.ExecutorProperties;
 import cn.hein.common.enums.executors.BlockingQueueTypeEnum;
 import cn.hein.common.enums.executors.RejectionPolicyTypeEnum;
+import cn.hein.common.spring.BeanRegistryHelper;
+import cn.hein.common.toolkit.StringUtil;
 import cn.hein.core.executor.DynamicTpExecutor;
-import cn.hein.core.properties.DynamicTpProperties;
-import cn.hein.common.toolkit.TimeUnitConvertUtil;
+import cn.hein.core.support.PropertiesBinderHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.PriorityOrdered;
+import org.springframework.core.env.Environment;
+import org.springframework.lang.NonNull;
 
 /**
- * Dynamic ThreadPool Bean registrar (not functional, deprecated).
+ * Registers dynamic thread pool beans based on configuration properties.
  *
  * @author hein
  */
-@Deprecated
-public class DynamicTpBeanRegistry implements BeanDefinitionRegistryPostProcessor, PriorityOrdered {
+@Slf4j
+public class DynamicTpBeanRegistry implements BeanDefinitionRegistryPostProcessor {
 
-    /**
-     * Dynamic ThreadPool configuration properties.
-     */
-    private final DynamicTpProperties dynamicTpProperties;
+    private final Environment environment;
 
-    public DynamicTpBeanRegistry(DynamicTpProperties dynamicTpProperties) {
-        this.dynamicTpProperties = dynamicTpProperties;
-    }
-
-    private void registerThreadPoolBeans(GenericApplicationContext context) {
-        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getBeanFactory();
-        dynamicTpProperties.getExecutors()
-                .stream()
-                .filter(each -> beanFactory.containsBeanDefinition(each.getThreadPoolName()))
-                .forEach(each -> {
-                    BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(DynamicTpExecutor.class)
-                            .addConstructorArgValue(each.getExecutorNamePrefix())
-                            .addConstructorArgValue(each.getCorePoolSize())
-                            .addConstructorArgValue(each.getMaximumPoolSize())
-                            .addConstructorArgValue(each.getKeepAliveTime())
-                            .addConstructorArgValue(TimeUnitConvertUtil.convert(each.getTimeUnit()))
-                            .addConstructorArgValue(BlockingQueueTypeEnum.getBlockingQueue(each.getQueueType(), each.getQueueCapacity()))
-                            .addConstructorArgValue(RejectionPolicyTypeEnum.getRejectionPolicy(each.getRejectedExecutionHandler()));
-                    beanFactory.registerBeanDefinition(each.getThreadPoolName(), builder.getBeanDefinition());
-                });
+    public DynamicTpBeanRegistry(Environment environment) {
+        this.environment = environment;
     }
 
     @Override
-    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        if (registry instanceof GenericApplicationContext) {
-            registerThreadPoolBeans((GenericApplicationContext) registry);
-        } else {
-            throw new FatalBeanException("Unsupported BeanDefinitionRegistry type: " + registry.getClass().getName());
+    public void postProcessBeanDefinitionRegistry(@NonNull BeanDefinitionRegistry registry) throws BeansException {
+        DynamicTpProperties properties = DynamicTpProperties.getInstance();
+        PropertiesBinderHelper.bindProperties(environment, properties);
+        if (properties.isEnabled()) {
+            properties.getExecutors().forEach(executor -> {
+                String beanName = StringUtil.kebabCaseToCamelCase(executor.getThreadPoolName());
+                BeanRegistryHelper.registerIfAbsent(
+                        registry,
+                        beanName,
+                        DynamicTpExecutor.class,
+                        buildConstructorArgs(executor)
+                );
+            });
         }
     }
 
-    @Override
-    public int getOrder() {
-        return PriorityOrdered.HIGHEST_PRECEDENCE;
+    /**
+     * Builds the constructor arguments for the DynamicTpExecutor bean.
+     *
+     * @param prop ExecutorProperties for configuring the thread pool
+     * @return an array of Object representing the constructor arguments
+     */
+    private Object[] buildConstructorArgs(ExecutorProperties prop) {
+        return new Object[]{
+                prop.getThreadPoolName(),
+                prop.getExecutorNamePrefix(),
+                prop.getCorePoolSize(),
+                prop.getMaximumPoolSize(),
+                prop.getKeepAliveTime(),
+                prop.getTimeUnit(),
+                BlockingQueueTypeEnum.getBlockingQueue(prop.getQueueType(), prop.getQueueCapacity()),
+                RejectionPolicyTypeEnum.getRejectionPolicy(prop.getRejectedExecutionHandler())
+        };
     }
 
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        // No operation needed here
+    public void postProcessBeanFactory(@NonNull ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        // No implementation needed here
     }
 }
