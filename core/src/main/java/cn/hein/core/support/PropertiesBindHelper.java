@@ -14,9 +14,9 @@ import java.util.Optional;
  *
  * @author hein
  */
-public final class PropertiesBinderHelper {
+public final class PropertiesBindHelper {
 
-    private PropertiesBinderHelper() {}
+    private PropertiesBindHelper() {}
 
     /**
      * Retrieves the singleton instance of the selected PropertiesBinder.
