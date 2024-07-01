@@ -1,6 +1,9 @@
-package cn.hein.core.properties;
+package cn.hein.common.entity.properties;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Configuration properties class for alarm platforms.
@@ -8,6 +11,7 @@ import lombok.Data;
  * @author hein
  */
 @Data
+@EqualsAndHashCode
 public class PlatformProperties {
 
     /**
@@ -28,5 +32,5 @@ public class PlatformProperties {
     /**
      * Alarm notification interval unit.
      */
-    private String notifyTimeUnit;
+    private TimeUnit notifyTimeUnit;
 }

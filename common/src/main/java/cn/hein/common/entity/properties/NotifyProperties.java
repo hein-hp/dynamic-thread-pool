@@ -1,6 +1,7 @@
-package cn.hein.core.properties;
+package cn.hein.common.entity.properties;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -10,12 +11,13 @@ import java.util.List;
  * @author hein
  */
 @Data
+@EqualsAndHashCode
 public class NotifyProperties {
 
     /**
      * Whether to enable alert notifications.
      */
-    private boolean enabled;
+    private boolean enabled = true;
 
     /**
      * Notification platform configuration.
@@ -33,6 +35,7 @@ public class NotifyProperties {
      * @author hein
      */
     @Data
+    @EqualsAndHashCode
     public static class NotifyItem {
 
         /**
@@ -43,7 +46,7 @@ public class NotifyProperties {
         /**
          * Whether the notification item is enabled.
          */
-        private boolean enabled;
+        private boolean enabled = true;
 
         /**
          * Threshold value for triggering the notification.

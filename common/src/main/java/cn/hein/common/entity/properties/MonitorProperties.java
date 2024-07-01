@@ -1,6 +1,9 @@
-package cn.hein.core.properties;
+package cn.hein.common.entity.properties;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Configuration properties class for monitor.
@@ -8,12 +11,13 @@ import lombok.Data;
  * @author hein
  */
 @Data
+@EqualsAndHashCode
 public class MonitorProperties {
 
     /**
      * Whether the monitor is enabled.
      */
-    private boolean enabled;
+    private boolean enabled = true;
 
     /**
      * Interval for monitor metric data.
@@ -23,5 +27,5 @@ public class MonitorProperties {
     /**
      * Time unit for monitor metric data.
      */
-    private String timeUnit;
+    private TimeUnit timeUnit;
 }

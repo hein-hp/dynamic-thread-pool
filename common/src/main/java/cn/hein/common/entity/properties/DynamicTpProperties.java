@@ -1,8 +1,7 @@
-package cn.hein.core.properties;
+package cn.hein.common.entity.properties;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -12,19 +11,18 @@ import java.util.List;
  * @author hein
  */
 @Data
-@Configuration
-@ConfigurationProperties(prefix = "dynamic.thread-pool")
+@EqualsAndHashCode
 public class DynamicTpProperties {
 
     /**
      * Whether to enable dynamic thread pools.
      */
-    private boolean enabled;
+    private boolean enabled = true;
 
     /**
      * Whether to notify configuration changes
      */
-    private boolean change;
+    private boolean change = true;
 
     /**
      * Monitoring configurations.
@@ -40,4 +38,12 @@ public class DynamicTpProperties {
      * Configurations for individual executors within dynamic thread pools.
      */
     private List<ExecutorProperties> executors;
+
+    public static DynamicTpProperties getInstance() {
+        return Holder.INSTANCE;
+    }
+
+    private static class Holder {
+        private static final DynamicTpProperties INSTANCE = new DynamicTpProperties();
+    }
 }
