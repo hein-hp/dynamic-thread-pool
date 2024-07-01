@@ -96,4 +96,21 @@ public enum BlockingQueueTypeEnum {
             throw new RuntimeException("Failed to create blocking queue", e);
         }
     }
+
+    /**
+     * Retrieves the class associated with the given queue name.
+     *
+     * @param name The name of the queue.
+     * @return The Class object representing the queue.
+     * @throws IllegalArgumentException If the queue type is unknown.
+     */
+    @SuppressWarnings("rawtypes")
+    public static Class<? extends BlockingQueue> getClassByName(String name) {
+        for (BlockingQueueTypeEnum type : BlockingQueueTypeEnum.values()) {
+            if (type.name.equalsIgnoreCase(name)) {
+                return type.queueClass;
+            }
+        }
+        throw new IllegalArgumentException("Unknown blocking queue type: " + name);
+    }
 }
