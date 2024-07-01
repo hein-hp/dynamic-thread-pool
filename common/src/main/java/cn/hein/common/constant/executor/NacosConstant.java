@@ -7,7 +7,5 @@ package cn.hein.common.constant.executor;
  */
 public class NacosConstant {
 
-    public static final String DYNAMIC = "dynamic";
-
-    public static final String THREAD_POOL = "thread-pool";
+    public static final String MAIN_PREFIX = "dynamic.thread-pool";
 }
