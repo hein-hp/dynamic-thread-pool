@@ -6,12 +6,11 @@ import org.springframework.context.ApplicationEventPublisher;
 
 /**
  * Abstract base class for event publishers that utilize Spring's ApplicationEventPublisher.
- * This class provides methods to construct and publish events.
  *
  * @author hein
  */
 @RequiredArgsConstructor
-public abstract class AbstractEventPublisher {
+public abstract class AbstractEventPublisher implements EventPublisher {
 
     /**
      * The ApplicationEventPublisher used to publish events.
