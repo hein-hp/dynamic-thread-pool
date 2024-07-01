@@ -7,7 +7,7 @@ import cn.hein.common.enums.executors.RejectionPolicyTypeEnum;
 import cn.hein.common.spring.BeanRegistryHelper;
 import cn.hein.common.toolkit.StringUtil;
 import cn.hein.core.executor.DynamicTpExecutor;
-import cn.hein.core.support.PropertiesBinderHelper;
+import cn.hein.core.support.PropertiesBindHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -33,17 +33,17 @@ public class DynamicTpBeanRegistry implements BeanDefinitionRegistryPostProcesso
     @Override
     public void postProcessBeanDefinitionRegistry(@NonNull BeanDefinitionRegistry registry) throws BeansException {
         DynamicTpProperties properties = DynamicTpProperties.getInstance();
-        PropertiesBinderHelper.bindProperties(environment, properties);
+        PropertiesBindHelper.bindProperties(environment, properties);
+        // set beanName
+        properties.getExecutors()
+                .forEach(executor -> executor.setBeanName(StringUtil.kebabCaseToCamelCase(executor.getThreadPoolName())));
         if (properties.isEnabled()) {
-            properties.getExecutors().forEach(executor -> {
-                String beanName = StringUtil.kebabCaseToCamelCase(executor.getThreadPoolName());
-                BeanRegistryHelper.registerIfAbsent(
-                        registry,
-                        beanName,
-                        DynamicTpExecutor.class,
-                        buildConstructorArgs(executor)
-                );
-            });
+            properties.getExecutors().forEach(executor -> BeanRegistryHelper.registerIfAbsent(
+                    registry,
+                    executor.getBeanName(),
+                    DynamicTpExecutor.class,
+                    buildConstructorArgs(executor)
+            ));
         }
     }
 
@@ -54,6 +54,7 @@ public class DynamicTpBeanRegistry implements BeanDefinitionRegistryPostProcesso
      * @return an array of Object representing the constructor arguments
      */
     private Object[] buildConstructorArgs(ExecutorProperties prop) {
+        checkParam(prop);
         return new Object[]{
                 prop.getThreadPoolName(),
                 prop.getExecutorNamePrefix(),
@@ -64,6 +65,15 @@ public class DynamicTpBeanRegistry implements BeanDefinitionRegistryPostProcesso
                 BlockingQueueTypeEnum.getBlockingQueue(prop.getQueueType(), prop.getQueueCapacity()),
                 RejectionPolicyTypeEnum.getRejectionPolicy(prop.getRejectedExecutionHandler())
         };
+    }
+
+    private void checkParam(ExecutorProperties prop) {
+        if (prop.getCorePoolSize() < 0 ||
+                prop.getMaximumPoolSize() <= 0 ||
+                prop.getMaximumPoolSize() < prop.getCorePoolSize() ||
+                prop.getKeepAliveTime() < 0) {
+            throw new IllegalArgumentException("[Init] Invalid thread pool configuration parameters.");
+        }
     }
 
     @Override
