@@ -1,16 +1,24 @@
 package cn.hein.core.executor;
 
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicLong;
+import lombok.Getter;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A dynamically configurable ThreadPoolExecutor.
  *
  * @author hein
  */
+@Getter
 public class DynamicTpExecutor extends ThreadPoolExecutor {
 
+    private final String threadPoolName;
+
     public DynamicTpExecutor(
+            String threadPoolName,
             String executorNamePrefix,
             int corePoolSize,
             int maximumPoolSize,
@@ -19,33 +27,6 @@ public class DynamicTpExecutor extends ThreadPoolExecutor {
             BlockingQueue<Runnable> workQueue,
             RejectedExecutionHandler handler) {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, new NamedThreadFactory(executorNamePrefix, 0L), handler);
-    }
-
-    /**
-     * Custom thread factory that names threads with a given prefix.
-     */
-    public static class NamedThreadFactory implements ThreadFactory {
-
-        /**
-         * Prefix for the thread's name.
-         */
-        private final String prefix;
-
-        /**
-         * Counter for generating unique thread IDs.
-         */
-        private final AtomicLong id;
-
-        public NamedThreadFactory(String prefix, Long startId) {
-            this.prefix = prefix;
-            id = new AtomicLong(startId);
-        }
-
-        @Override
-        public Thread newThread(Runnable r) {
-            Thread thread = new Thread(r);
-            thread.setName(prefix + "-" + id.getAndDecrement());
-            return thread;
-        }
+        this.threadPoolName = threadPoolName;
     }
 }
