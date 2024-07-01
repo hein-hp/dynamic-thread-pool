@@ -3,6 +3,7 @@ package cn.hein.common.spring;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.lang.NonNull;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class ApplicationContextHolder implements ApplicationContextAware {
      * @throws BeansException if there is an issue setting the context.
      */
     @Override
-    public void setApplicationContext(ApplicationContext context) throws BeansException {
+    public void setApplicationContext(@NonNull ApplicationContext context) throws BeansException {
         ApplicationContextHolder.context = context;
     }
 
