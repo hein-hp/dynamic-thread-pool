@@ -5,6 +5,7 @@ import cn.hein.core.DynamicTpContext;
 import cn.hein.core.refresher.NacosPropertiesRefresher;
 import cn.hein.core.refresher.Refresher;
 import cn.hein.core.registry.DynamicTpBeanRegistry;
+import cn.hein.core.spring.DynamicTpPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -37,5 +38,10 @@ public class Config {
     @Bean
     public Refresher refresher(DynamicTpProperties properties, DynamicTpContext context) {
         return new NacosPropertiesRefresher(properties, context);
+    }
+
+    @Bean
+    public DynamicTpPostProcessor dynamicTpPostProcessor() {
+        return new DynamicTpPostProcessor();
     }
 }
