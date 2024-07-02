@@ -8,6 +8,7 @@ import cn.hein.common.queue.ResizeLinkedBlockingQueue;
 import cn.hein.common.spring.ApplicationContextHolder;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.executor.NamedThreadFactory;
+import cn.hein.core.monitor.MonitorController;
 import cn.hutool.core.collection.CollUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class DynamicTpContext {
     private static final Map<String, DynamicTpExecutor> DYNAMIC_CONTEXT = new ConcurrentHashMap<>();
 
     private final DynamicTpProperties properties;
+    private final MonitorController monitor;
 
     /**
      * Lists all registered dynamic thread pool names.
@@ -78,7 +80,21 @@ public class DynamicTpContext {
         }
         log.info("DynamicTp refresh initiated. Old properties: {}, New properties: {}", oldProp, properties);
         refreshExecutor();
+        refreshConfig(oldProp);
         // Additional refresh logic for other properties will be added here.
+    }
+
+    private void refreshConfig(DynamicTpProperties oldProp) {
+        refreshMonitor(oldProp);
+    }
+
+    private void refreshMonitor(DynamicTpProperties oldProp) {
+        if (properties.getMonitor().isEnabled() && !oldProp.getMonitor().isEnabled()) {
+            monitor.start(properties);
+        }
+        if (!properties.getMonitor().isEnabled() && oldProp.getMonitor().isEnabled()) {
+            monitor.stop();
+        }
     }
 
     private void refreshExecutor() {
