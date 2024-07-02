@@ -32,11 +32,7 @@ public class DynamicTpBeanRegistry implements BeanDefinitionRegistryPostProcesso
 
     @Override
     public void postProcessBeanDefinitionRegistry(@NonNull BeanDefinitionRegistry registry) throws BeansException {
-        DynamicTpProperties properties = DynamicTpProperties.getInstance();
-        PropertiesBindHelper.bindProperties(environment, properties);
-        // set beanName
-        properties.getExecutors()
-                .forEach(executor -> executor.setBeanName(StringUtil.kebabCaseToCamelCase(executor.getThreadPoolName())));
+        DynamicTpProperties properties = bindProperties();
         if (properties.isEnabled()) {
             properties.getExecutors().forEach(executor -> BeanRegistryHelper.registerIfAbsent(
                     registry,
@@ -47,12 +43,15 @@ public class DynamicTpBeanRegistry implements BeanDefinitionRegistryPostProcesso
         }
     }
 
-    /**
-     * Builds the constructor arguments for the DynamicTpExecutor bean.
-     *
-     * @param prop ExecutorProperties for configuring the thread pool
-     * @return an array of Object representing the constructor arguments
-     */
+    private DynamicTpProperties bindProperties() {
+        DynamicTpProperties properties = DynamicTpProperties.getInstance();
+        PropertiesBindHelper.bindProperties(environment, properties);
+        // set beanName
+        properties.getExecutors()
+                .forEach(executor -> executor.setBeanName(StringUtil.kebabCaseToCamelCase(executor.getThreadPoolName())));
+        return properties;
+    }
+
     private Object[] buildConstructorArgs(ExecutorProperties prop) {
         checkParam(prop);
         return new Object[]{
