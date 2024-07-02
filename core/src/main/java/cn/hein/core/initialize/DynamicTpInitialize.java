@@ -1,7 +1,7 @@
 package cn.hein.core.initialize;
 
 import cn.hein.common.entity.properties.DynamicTpProperties;
-import cn.hein.core.monitor.Monitor;
+import cn.hein.core.monitor.LivenessMonitor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class DynamicTpInitialize implements InitializingBean {
 
     private final DynamicTpProperties prop;
-    private final Monitor monitor;
+    private final LivenessMonitor monitor;
 
     @Override
     public void afterPropertiesSet() throws Exception {
