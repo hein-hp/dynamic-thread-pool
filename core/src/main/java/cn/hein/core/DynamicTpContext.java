@@ -10,7 +10,9 @@ import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.executor.NamedThreadFactory;
 import cn.hutool.core.collection.CollUtil;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -25,15 +27,16 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Getter
+@Component
+@RequiredArgsConstructor
 public class DynamicTpContext {
 
+    /**
+     * Dynamic thread pool executor map.
+     */
     private static final Map<String, DynamicTpExecutor> DYNAMIC_CONTEXT = new ConcurrentHashMap<>();
 
     private final DynamicTpProperties properties;
-
-    public DynamicTpContext(DynamicTpProperties properties) {
-        this.properties = properties;
-    }
 
     /**
      * Lists all registered dynamic thread pool names.
