@@ -40,8 +40,7 @@ public class DynamicTpContext {
      *
      * @return A list of thread pool names.
      */
-    public List<String> listDynamicTp() {
-        System.out.println(DYNAMIC_CONTEXT);
+    public static List<String> listDynamicTp() {
         return CollUtil.newArrayList(DYNAMIC_CONTEXT.keySet());
     }
 
@@ -51,7 +50,7 @@ public class DynamicTpContext {
      * @param threadPoolName The name of the thread pool.
      * @return The DynamicTpExecutor instance.
      */
-    public DynamicTpExecutor getDynamicTp(final String threadPoolName) {
+    public static DynamicTpExecutor getDynamicTp(final String threadPoolName) {
         return Optional.ofNullable(DYNAMIC_CONTEXT.get(threadPoolName))
                 .orElseThrow(() -> new RuntimeException("Dynamic thread pool not found: " + threadPoolName));
     }
