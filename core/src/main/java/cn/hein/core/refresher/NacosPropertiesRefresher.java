@@ -1,9 +1,7 @@
 package cn.hein.core.refresher;
 
 import cn.hein.common.entity.properties.DynamicTpProperties;
-import cn.hein.common.toolkit.ThreadPoolInfoPrinter;
 import cn.hein.core.DynamicTpContext;
-import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.publisher.RefreshEventPublisher;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +10,7 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.SmartApplicationListener;
 import org.springframework.core.env.Environment;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 import static cn.hein.common.spring.ApplicationContextHolder.getBean;
 
@@ -21,6 +20,7 @@ import static cn.hein.common.spring.ApplicationContextHolder.getBean;
  * @author hein
  */
 @Slf4j
+@Component
 public class NacosPropertiesRefresher extends AbstractRefresher implements SmartApplicationListener {
 
     public NacosPropertiesRefresher(DynamicTpProperties properties,
@@ -44,12 +44,10 @@ public class NacosPropertiesRefresher extends AbstractRefresher implements Smart
     protected void afterRefresh() {
         RefreshEventPublisher publisher = getBean(RefreshEventPublisher.class);
         publisher.publishEvent(getBean(DynamicTpProperties.class));
-        ThreadPoolInfoPrinter.printThreadPoolInfo(getBean(DynamicTpExecutor.class));
     }
 
     @Override
     protected DynamicTpProperties beforeRefresh() {
-        ThreadPoolInfoPrinter.printThreadPoolInfo(getBean(DynamicTpExecutor.class));
         DynamicTpProperties oldProp = getBean(DynamicTpProperties.class);
         return BeanUtil.toBean(oldProp, DynamicTpProperties.class);
     }
