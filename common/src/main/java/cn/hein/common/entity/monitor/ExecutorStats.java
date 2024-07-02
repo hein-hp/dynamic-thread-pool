@@ -31,7 +31,7 @@ public class ExecutorStats {
     private int queueSize;
 
     /**
-     * The maximum capacity of the task queue.
+     * The remaining capacity of the task queue.
      */
-    private int queueCapacity;
+    private int remainingQueueCapacity;
 }
