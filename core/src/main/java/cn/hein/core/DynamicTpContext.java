@@ -124,8 +124,10 @@ public class DynamicTpContext {
         if (executor.getMaximumPoolSize() != prop.getMaximumPoolSize()) {
             executor.setMaximumPoolSize(prop.getMaximumPoolSize());
         }
-        if (!executor.getExecutorNamePrefix().equals(prop.getExecutorNamePrefix())) {
-            executor.setThreadFactory(new NamedThreadFactory(prop.getExecutorNamePrefix(), 0L));
+        if (executor.getThreadFactory() instanceof NamedThreadFactory namedThreadFactory) {
+            if (namedThreadFactory.getPrefix().equals(prop.getExecutorNamePrefix())) {
+                executor.setThreadFactory(new NamedThreadFactory(prop.getExecutorNamePrefix(), 0L));
+            }
         }
         if (executor.getKeepAliveTime(TimeUnit.NANOSECONDS) != prop.getTimeUnit().toNanos(prop.getKeepAliveTime())) {
             executor.setKeepAliveTime(prop.getKeepAliveTime(), prop.getTimeUnit());

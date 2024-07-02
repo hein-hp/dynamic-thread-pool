@@ -17,8 +17,6 @@ public class DynamicTpExecutor extends ThreadPoolExecutor {
 
     private final String threadPoolName;
 
-    private final String executorNamePrefix;
-
     public DynamicTpExecutor(
             String threadPoolName,
             String executorNamePrefix,
@@ -30,6 +28,5 @@ public class DynamicTpExecutor extends ThreadPoolExecutor {
             RejectedExecutionHandler handler) {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, new NamedThreadFactory(executorNamePrefix, 0L), handler);
         this.threadPoolName = threadPoolName;
-        this.executorNamePrefix = executorNamePrefix;
     }
 }
