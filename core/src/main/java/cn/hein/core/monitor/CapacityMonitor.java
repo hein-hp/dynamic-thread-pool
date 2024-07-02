@@ -9,17 +9,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
- * Liveness Monitor implementation for collecting statistics about the active threads and maximum pool size.
+ * Capacity Monitor implementation for collecting statistics about the queue size and remaining queue capacity
  *
  * @author hein
  */
 @Slf4j
 @Component
-public class LivenessMonitor extends AbstractMonitor implements Filter<ExecutorStats> {
+public class CapacityMonitor extends AbstractMonitor implements Filter<ExecutorStats> {
 
     @Override
     public int getOrder() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -32,14 +32,14 @@ public class LivenessMonitor extends AbstractMonitor implements Filter<ExecutorS
         String threadPoolName = context.getThreadPoolName();
         DynamicTpExecutor executor = DynamicTpContext.getDynamicTp(threadPoolName);
         doCollect(context, executor);
-        log.info("Collected data for thread pool {}: Active Count - {}, Maximum Pool Size - {}",
-                threadPoolName, context.getActiveCount(), context.getMaximumPoolSize());
+        log.info("Collected data for thread pool {}: Queue Size - {}, Remaining Queue Capacity - {}",
+                threadPoolName, context.getQueueSize(), context.getRemainingQueueCapacity());
         next.handle(context);
     }
 
     @Override
     protected void doCollect(ExecutorStats stats, DynamicTpExecutor executor) {
-        stats.setActiveCount(executor.getActiveCount());
-        stats.setMaximumPoolSize(executor.getMaximumPoolSize());
+        stats.setQueueSize(executor.getQueue().size());
+        stats.setRemainingQueueCapacity(executor.getQueue().remainingCapacity());
     }
 }

@@ -45,7 +45,6 @@ public abstract class AbstractMonitor implements Monitor {
                 HandlerChain<ExecutorStats> chain = HandlerChainFactory.buildChain(
                         context -> {
                             // TODO handle ExecutorStats
-                            System.out.println("context = " + context);
                         },
                         FilterContext.getFilters("COLLECT").toArray(new Filter[0]));
                 chain.execute(stats);
