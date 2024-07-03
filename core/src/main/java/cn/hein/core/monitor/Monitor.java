@@ -1,6 +1,8 @@
 package cn.hein.core.monitor;
 
+import cn.hein.common.entity.monitor.ExecutorStats;
 import cn.hein.common.entity.properties.DynamicTpProperties;
+import cn.hein.common.entity.properties.ExecutorProperties;
 
 /**
  * Defines the contract for a dynamic thread pool monitor.
@@ -12,7 +14,7 @@ public interface Monitor {
     /**
      * Monitors the metrics for the thread pool.
      */
-    void monitor();
+    void monitor(ExecutorStats stats, ExecutorProperties prop);
 
     /**
      * Collects the metrics for the thread pool.
