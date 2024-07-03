@@ -1,18 +1,23 @@
 package cn.hein.core.monitor;
 
+import cn.hein.common.entity.alarm.AlarmContent;
 import cn.hein.common.entity.monitor.ExecutorStats;
 import cn.hein.common.entity.properties.DynamicTpProperties;
+import cn.hein.common.entity.properties.ExecutorProperties;
+import cn.hein.common.entity.properties.NotifyProperties;
+import cn.hein.common.enums.alarm.AlarmTypeEnum;
 import cn.hein.common.pattern.chain.Filter;
 import cn.hein.common.pattern.chain.FilterContext;
 import cn.hein.common.pattern.chain.HandlerChain;
 import cn.hein.common.pattern.chain.HandlerChainFactory;
 import cn.hein.common.spring.ApplicationContextHolder;
-import cn.hein.common.toolkit.StringUtil;
 import cn.hein.core.DynamicTpContext;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.executor.NamedThreadFactory;
+import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -33,28 +38,87 @@ public abstract class AbstractMonitor implements Monitor {
     @Override
     @SuppressWarnings("unchecked")
     public void collect() {
-        // executor is running and enabled monitor
-        if (isRunning) {
-            DynamicTpContext.listDynamicTp().forEach(each -> {
-                DynamicTpExecutor executor = DynamicTpContext.getDynamicTp(each);
-                if (!ApplicationContextHolder.containsBean(StringUtil.kebabCaseToCamelCase(executor.getThreadPoolName()))) {
-                    throw new RuntimeException("DynamicTp bean not found: " + executor.getThreadPoolName());
-                }
-                ExecutorStats stats = new ExecutorStats();
-                stats.setThreadPoolName(each);
-                HandlerChain<ExecutorStats> chain = HandlerChainFactory.buildChain(
-                        context -> {
-                            // TODO handle ExecutorStats
-                        },
-                        FilterContext.getFilters("COLLECT").toArray(new Filter[0]));
-                chain.execute(stats);
-            });
+        try {
+            if (isRunning) {
+                DynamicTpProperties.getInstance().getExecutors().forEach(each -> {
+                    DynamicTpExecutor executor = DynamicTpContext.getDynamicTp(each.getThreadPoolName());
+                    if (!ApplicationContextHolder.containsBean(each.getBeanName())) {
+                        throw new RuntimeException("DynamicTp bean not found.");
+                    }
+                    ExecutorStats stats = new ExecutorStats();
+                    stats.setThreadPoolName(executor.getThreadPoolName());
+                    HandlerChain<ExecutorStats> chain = HandlerChainFactory.buildChain(
+                            context -> monitor((ExecutorStats) context, each),
+                            FilterContext.getFilters("COLLECT").toArray(new Filter[0]));
+                    chain.execute(stats);
+                });
+            }
+        } catch (Exception e) {
+            log.info("collect exception", e);
         }
     }
 
     @Override
-    public void monitor() {
-        // TODO monitor
+    public void monitor(ExecutorStats stats, ExecutorProperties prop) {
+        AlarmContent content = new AlarmContent();
+        content.setThreadPoolName(stats.getThreadPoolName());
+        prop.getNotify().getNotifyItem().forEach(each -> {
+            if (each.isEnabled()) {
+                doMonitor(stats, each, content);
+            }
+        });
+        if (CollUtil.isNotEmpty(content.getAlarmItems())) {
+            // TODO publish alarm event
+            System.out.println("content = " + content);
+        }
+    }
+
+    private void doMonitor(ExecutorStats stats, NotifyProperties.NotifyItem item, AlarmContent content) {
+        switch (AlarmTypeEnum.from(item.getType())) {
+            case LIVENESS:
+                if (item.isEnabled()) {
+                    monitorLiveness(stats, item.getThreshold(), content);
+                }
+                break;
+            case CAPACITY:
+                if (item.isEnabled()) {
+                    monitorCapacity(stats, item.getThreshold(), content);
+                }
+                break;
+            default:
+                log.warn("no monitor type.");
+                break;
+        }
+    }
+
+    private void monitorCapacity(ExecutorStats stats, double threshold, AlarmContent content) {
+        double capacity = (double) stats.getQueueSize() / (stats.getQueueSize() + stats.getRemainingQueueCapacity()) * 100;
+        if (capacity >= threshold) {
+            if (content.getAlarmItems() == null) {
+                content.setAlarmItems(new ArrayList<>());
+            }
+            AlarmContent.AlarmItem item = AlarmContent.AlarmItem.builder()
+                    .type(AlarmTypeEnum.CAPACITY)
+                    .value(capacity)
+                    .threshold(threshold)
+                    .build();
+            content.getAlarmItems().add(item);
+        }
+    }
+
+    private void monitorLiveness(ExecutorStats stats, double threshold, AlarmContent content) {
+        double liveness = (double) stats.getActiveCount() / stats.getMaximumPoolSize() * 100;
+        if (liveness >= threshold) {
+            if (content.getAlarmItems() == null) {
+                content.setAlarmItems(new ArrayList<>());
+            }
+            AlarmContent.AlarmItem item = AlarmContent.AlarmItem.builder()
+                    .type(AlarmTypeEnum.LIVENESS)
+                    .value(liveness)
+                    .threshold(threshold)
+                    .build();
+            content.getAlarmItems().add(item);
+        }
     }
 
     @Override
@@ -76,6 +140,7 @@ public abstract class AbstractMonitor implements Monitor {
                 scheduledFuture.cancel(false); // false means do not interrupt if running
             }
             isRunning = false;
+            log.info("MONITOR_EXECUTOR stop");
         }
     }
 
