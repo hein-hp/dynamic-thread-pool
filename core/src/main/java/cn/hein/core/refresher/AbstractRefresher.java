@@ -4,7 +4,8 @@ import cn.hein.common.constant.executor.NacosConstant;
 import cn.hein.common.entity.properties.DynamicTpProperties;
 import cn.hein.common.enums.properties.PropertiesTypeEnum;
 import cn.hein.common.toolkit.StringUtil;
-import cn.hein.core.DynamicTpContext;
+import cn.hein.core.context.DynamicTpContext;
+import cn.hein.core.context.NotifyPlatformContext;
 import cn.hein.core.support.PropertiesBindHelper;
 import cn.hein.core.support.PropertiesParseHelper;
 import cn.hutool.core.collection.CollUtil;
@@ -24,11 +25,15 @@ import java.util.stream.Collectors;
 public abstract class AbstractRefresher implements Refresher {
 
     private final DynamicTpProperties properties;
-    private final DynamicTpContext context;
+    private final DynamicTpContext tpContext;
+    private final NotifyPlatformContext pfContext;
 
-    protected AbstractRefresher(DynamicTpProperties properties, DynamicTpContext context) {
+    protected AbstractRefresher(DynamicTpProperties properties,
+                                DynamicTpContext tpContext,
+                                NotifyPlatformContext pfContext) {
         this.properties = properties;
-        this.context = context;
+        this.tpContext = tpContext;
+        this.pfContext = pfContext;
     }
 
     /**
@@ -78,7 +83,8 @@ public abstract class AbstractRefresher implements Refresher {
      * @param oldProp The previous properties before the refresh.
      */
     private void doRefresh(DynamicTpProperties oldProp) {
-        context.refresh(oldProp);
+        tpContext.refresh(oldProp);
+        pfContext.refresh();
     }
 
     /**
