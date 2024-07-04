@@ -14,7 +14,7 @@ import cn.hein.common.spring.ApplicationContextHolder;
 import cn.hein.core.context.DynamicTpContext;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.executor.NamedThreadFactory;
-import cn.hein.core.publisher.NotifyPublisher;
+import cn.hein.core.publisher.NotifyEventPublisher;
 import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -71,7 +71,7 @@ public abstract class AbstractMonitor implements Monitor {
         });
         if (CollUtil.isNotEmpty(content.getAlarmItems()) && needAlarm(prop)) {
             // alarm
-            NotifyPublisher publisher = ApplicationContextHolder.getBean(NotifyPublisher.class);
+            NotifyEventPublisher publisher = ApplicationContextHolder.getBean(NotifyEventPublisher.class);
             publisher.publishEvent(content);
         }
     }
