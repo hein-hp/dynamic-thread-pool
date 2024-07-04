@@ -1,7 +1,8 @@
 package cn.hein.core.refresher;
 
 import cn.hein.common.entity.properties.DynamicTpProperties;
-import cn.hein.core.DynamicTpContext;
+import cn.hein.core.context.DynamicTpContext;
+import cn.hein.core.context.NotifyPlatformContext;
 import cn.hein.core.publisher.RefreshEventPublisher;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,9 @@ import static cn.hein.common.spring.ApplicationContextHolder.getBean;
 public class NacosPropertiesRefresher extends AbstractRefresher implements SmartApplicationListener {
 
     public NacosPropertiesRefresher(DynamicTpProperties properties,
-                                    DynamicTpContext context) {
-        super(properties, context);
+                                    DynamicTpContext tpContext,
+                                    NotifyPlatformContext pfContext) {
+        super(properties, tpContext, pfContext);
     }
 
     @Override
