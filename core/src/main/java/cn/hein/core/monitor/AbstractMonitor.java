@@ -11,9 +11,10 @@ import cn.hein.common.pattern.chain.FilterContext;
 import cn.hein.common.pattern.chain.HandlerChain;
 import cn.hein.common.pattern.chain.HandlerChainFactory;
 import cn.hein.common.spring.ApplicationContextHolder;
-import cn.hein.core.DynamicTpContext;
+import cn.hein.core.context.DynamicTpContext;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.executor.NamedThreadFactory;
+import cn.hein.core.publisher.NotifyPublisher;
 import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,6 +49,7 @@ public abstract class AbstractMonitor implements Monitor {
                     ExecutorStats stats = new ExecutorStats();
                     stats.setThreadPoolName(executor.getThreadPoolName());
                     HandlerChain<ExecutorStats> chain = HandlerChainFactory.buildChain(
+                            // must cast
                             context -> monitor((ExecutorStats) context, each),
                             FilterContext.getFilters("COLLECT").toArray(new Filter[0]));
                     chain.execute(stats);
@@ -67,10 +69,15 @@ public abstract class AbstractMonitor implements Monitor {
                 doMonitor(stats, each, content);
             }
         });
-        if (CollUtil.isNotEmpty(content.getAlarmItems())) {
-            // TODO publish alarm event
-            System.out.println("content = " + content);
+        if (CollUtil.isNotEmpty(content.getAlarmItems()) && needAlarm(prop)) {
+            // alarm
+            NotifyPublisher publisher = ApplicationContextHolder.getBean(NotifyPublisher.class);
+            publisher.publishEvent(content);
         }
+    }
+
+    private boolean needAlarm(ExecutorProperties prop) {
+        return prop.getNotify().isEnabled();
     }
 
     private void doMonitor(ExecutorStats stats, NotifyProperties.NotifyItem item, AlarmContent content) {
