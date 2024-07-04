@@ -5,9 +5,9 @@ import lombok.Getter;
 /**
  * Enum representing different types of alarms.
  *
- * @author Hein
+ * @author hein
  */
-@Getter // Lombok annotation to generate getters for fields
+@Getter
 public enum AlarmTypeEnum {
 
     /**
