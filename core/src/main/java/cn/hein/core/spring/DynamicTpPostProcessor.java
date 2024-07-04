@@ -2,7 +2,7 @@ package cn.hein.core.spring;
 
 import cn.hein.common.entity.properties.DynamicTpProperties;
 import cn.hein.common.entity.properties.ExecutorProperties;
-import cn.hein.core.DynamicTpContext;
+import cn.hein.core.context.DynamicTpContext;
 import cn.hein.core.executor.DynamicTpExecutor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
