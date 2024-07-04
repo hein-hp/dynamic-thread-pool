@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Configuration properties class for alarm platforms.
+ * Configuration properties class for notify platforms.
  *
  * @author hein
  */
@@ -15,22 +15,32 @@ import java.util.concurrent.TimeUnit;
 public class PlatformProperties {
 
     /**
-     * Alarm notification platform
+     * Notify notification key.
+     */
+    private String key;
+
+    /**
+     * Notify notification platform
      */
     private String platform;
 
     /**
-     * Alarm notification recipient.
+     * Notify notification recipient.
      */
     private String receiver;
 
     /**
-     * Alarm notification interval.
+     * Whether to enable notification.
+     */
+    private boolean enabled;
+
+    /**
+     * Notify notification interval.
      */
     private String notifyInterval;
 
     /**
-     * Alarm notification interval unit.
+     * Notify notification interval unit.
      */
     private TimeUnit notifyTimeUnit;
 }
