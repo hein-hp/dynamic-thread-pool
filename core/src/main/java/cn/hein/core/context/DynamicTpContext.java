@@ -1,4 +1,4 @@
-package cn.hein.core;
+package cn.hein.core.context;
 
 import cn.hein.common.entity.properties.DynamicTpProperties;
 import cn.hein.common.entity.properties.ExecutorProperties;
@@ -80,11 +80,6 @@ public class DynamicTpContext {
         }
         log.info("DynamicTp refresh initiated. Old properties: {}, New properties: {}", oldProp, properties);
         refreshExecutor();
-        refreshConfig(oldProp);
-        // Additional refresh logic for other properties will be added here.
-    }
-
-    private void refreshConfig(DynamicTpProperties oldProp) {
         refreshMonitor(oldProp);
     }
 
