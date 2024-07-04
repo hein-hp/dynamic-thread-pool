@@ -3,7 +3,7 @@ package cn.hein.core.monitor;
 import cn.hein.common.entity.monitor.ExecutorStats;
 import cn.hein.common.pattern.chain.Filter;
 import cn.hein.common.pattern.chain.Handler;
-import cn.hein.core.DynamicTpContext;
+import cn.hein.core.context.DynamicTpContext;
 import cn.hein.core.executor.DynamicTpExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
