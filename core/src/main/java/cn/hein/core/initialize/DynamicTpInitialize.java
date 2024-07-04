@@ -3,6 +3,7 @@ package cn.hein.core.initialize;
 import cn.hein.common.entity.properties.DynamicTpProperties;
 import cn.hein.common.pattern.chain.Filter;
 import cn.hein.common.spring.ApplicationContextHolder;
+import cn.hein.core.context.NotifyPlatformContext;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.monitor.AbstractMonitor;
 import cn.hein.core.monitor.MonitorController;
@@ -30,6 +31,12 @@ public class DynamicTpInitialize implements InitializingBean {
         context.getBean(ApplicationContextHolder.class);
         initDependsOnBeans(new Class[]{DynamicTpExecutor.class, Filter.class});
         initMonitorExecutor(prop);
+        initPlatform();
+    }
+
+    private void initPlatform() {
+        NotifyPlatformContext ctx = ApplicationContextHolder.getBean(NotifyPlatformContext.class);
+        ctx.refresh();
     }
 
     /**
