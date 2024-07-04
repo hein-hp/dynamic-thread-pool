@@ -22,7 +22,7 @@ public class NotifyProperties {
     /**
      * Notification platform configuration.
      */
-    private String platform;
+    private String platformKey;
 
     /**
      * Notification item configuration.
