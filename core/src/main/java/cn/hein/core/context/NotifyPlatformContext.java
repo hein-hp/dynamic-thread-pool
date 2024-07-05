@@ -30,7 +30,7 @@ public class NotifyPlatformContext {
     /**
      * Get PlatformProperties by key.
      *
-     * @param key the key
+     * @param key the unique key
      * @return PlatformProperties
      */
     public PlatformProperties getPlatforms(String key) {
