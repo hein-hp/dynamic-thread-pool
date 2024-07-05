@@ -9,6 +9,7 @@ import cn.hein.common.spring.ApplicationContextHolder;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.executor.NamedThreadFactory;
 import cn.hein.core.monitor.MonitorController;
+import cn.hein.core.support.PropertiesEqualHelper;
 import cn.hutool.core.collection.CollUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +76,7 @@ public class DynamicTpContext {
      * @param oldProp The previous properties.
      */
     public void refresh(DynamicTpProperties oldProp) {
-        if (properties.equals(oldProp)) {
+        if (PropertiesEqualHelper.equal(oldProp, properties)) {
             return;
         }
         log.info("DynamicTp refresh initiated. Old properties: {}, New properties: {}", oldProp, properties);
@@ -143,10 +144,13 @@ public class DynamicTpContext {
             }
         }
         if (executor.getKeepAliveTime(TimeUnit.NANOSECONDS) != prop.getTimeUnit().toNanos(prop.getKeepAliveTime())) {
+            // super
             executor.setKeepAliveTime(prop.getKeepAliveTime(), prop.getTimeUnit());
+            executor.setKeepAliveTime(prop.getKeepAliveTime());
+            executor.setUnit(prop.getTimeUnit());
         }
-        if (executor.allowsCoreThreadTimeOut() != prop.isAllowCoreThreadTimeout()) {
-            executor.allowCoreThreadTimeOut(prop.isAllowCoreThreadTimeout());
+        if (executor.allowsCoreThreadTimeOut() != prop.isAllowCoreThreadTimeOut()) {
+            executor.allowCoreThreadTimeOut(prop.isAllowCoreThreadTimeOut());
         }
         executor.setRejectedExecutionHandler(RejectionPolicyTypeEnum.getRejectionPolicy(prop.getRejectedExecutionHandler()));
     }
