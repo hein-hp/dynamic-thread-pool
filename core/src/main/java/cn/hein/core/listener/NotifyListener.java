@@ -6,14 +6,11 @@ import cn.hein.common.entity.properties.ExecutorProperties;
 import cn.hein.common.enums.alarm.NotifyTypeEnum;
 import cn.hein.core.context.NotifyPlatformContext;
 import cn.hein.core.event.NotifyEvent;
-import cn.hein.core.event.RefreshEvent;
 import cn.hein.core.notifier.StrategyContext;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.event.GenericApplicationListener;
-import org.springframework.core.ResolvableType;
+import org.springframework.context.ApplicationListener;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
@@ -22,37 +19,26 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Event Listener
+ * Notify Event Listener
  *
  * @author hein
  */
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class EventListener implements GenericApplicationListener {
+public class NotifyListener implements ApplicationListener<NotifyEvent> {
 
     private final StrategyContext strategies;
     private final NotifyPlatformContext pfContext;
 
     @Override
-    public boolean supportsEventType(ResolvableType eventType) {
-        Class<?> type = eventType.getRawClass();
-        if (type != null) {
-            return RefreshEvent.class.isAssignableFrom(type) || NotifyEvent.class.isAssignableFrom(type);
-        }
-        return false;
-    }
-
-    @Override
-    public void onApplicationEvent(@NonNull ApplicationEvent event) {
+    public void onApplicationEvent(@NonNull NotifyEvent event) {
         try {
-            if (event instanceof RefreshEvent refreshEvent) {
-                // current do nothing
-            } else if (event instanceof NotifyEvent notifyEvent) {
-                doNotify(((AlarmContent) notifyEvent.getSource()), notifyEvent.getTimestamp());
+            if (event.getSource() instanceof AlarmContent content) {
+                doNotify(content, event.getTimestamp());
             }
         } catch (Exception e) {
-            log.error("event handle failed.", e);
+            log.error("notify event handle failed.", e);
         }
     }
 
@@ -62,9 +48,9 @@ public class EventListener implements GenericApplicationListener {
         List<String> platformKeys = StrUtil.split(propMap.get(content.getThreadPoolName()).getNotify().getPlatformKey(), ",");
         platformKeys.forEach(key -> {
             try {
-                strategies.notify(NotifyTypeEnum.from(pfContext.getPlatforms(key).getPlatform()), content, timestamp, key);
+                strategies.alarmNotify(NotifyTypeEnum.from(pfContext.getPlatforms(key).getPlatform()), content, timestamp, key);
             } catch (Exception e) {
-                throw new RuntimeException("notify failed.", e);
+                throw new RuntimeException("alarm notify failed.", e);
             }
         });
     }
