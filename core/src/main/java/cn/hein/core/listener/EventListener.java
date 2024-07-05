@@ -60,6 +60,12 @@ public class EventListener implements GenericApplicationListener {
         Map<String, ExecutorProperties> propMap = DynamicTpProperties.getInstance()
                 .getExecutors().stream().collect(Collectors.toMap(ExecutorProperties::getThreadPoolName, v -> v));
         List<String> platformKeys = StrUtil.split(propMap.get(content.getThreadPoolName()).getNotify().getPlatformKey(), ",");
-        platformKeys.forEach(key -> strategies.notify(NotifyTypeEnum.from(pfContext.getPlatforms(key).getPlatform()), content, timestamp));
+        platformKeys.forEach(key -> {
+            try {
+                strategies.notify(NotifyTypeEnum.from(pfContext.getPlatforms(key).getPlatform()), content, timestamp, key);
+            } catch (Exception e) {
+                throw new RuntimeException("notify failed.", e);
+            }
+        });
     }
 }
