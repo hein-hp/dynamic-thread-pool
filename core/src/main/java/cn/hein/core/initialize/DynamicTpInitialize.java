@@ -7,6 +7,7 @@ import cn.hein.core.context.NotifyPlatformContext;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.monitor.AbstractMonitor;
 import cn.hein.core.monitor.MonitorController;
+import cn.hein.core.notifier.NotifyManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -32,6 +33,11 @@ public class DynamicTpInitialize implements InitializingBean {
         initDependsOnBeans(new Class[]{DynamicTpExecutor.class, Filter.class});
         initMonitorExecutor(prop);
         initPlatform();
+        initNotifyManager();
+    }
+
+    private void initNotifyManager() {
+        NotifyManager.refresh();
     }
 
     private void initPlatform() {

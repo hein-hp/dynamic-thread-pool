@@ -40,7 +40,7 @@ public class EmailNotifier implements Strategy {
     @Override
     public void notify(AlarmContent content, long timestamp, String sendKey) throws Exception {
         PlatformProperties platforms = context.getPlatforms(sendKey);
-        if (platforms.isEnabled()) {
+        if (platforms.isEnabled() && NotifyManager.canNotify(content, timestamp)) {
             mailSender.sendMailWithAttachment(platforms.getReceiver(),
                     "【报警】动态线程池运行告警",
                     "AlarmTemplate.ftl",

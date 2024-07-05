@@ -6,6 +6,7 @@ import cn.hein.common.enums.properties.PropertiesTypeEnum;
 import cn.hein.common.toolkit.StringUtil;
 import cn.hein.core.context.DynamicTpContext;
 import cn.hein.core.context.NotifyPlatformContext;
+import cn.hein.core.notifier.NotifyManager;
 import cn.hein.core.support.PropertiesBindHelper;
 import cn.hein.core.support.PropertiesParseHelper;
 import cn.hutool.core.collection.CollUtil;
@@ -85,6 +86,7 @@ public abstract class AbstractRefresher implements Refresher {
     private void doRefresh(DynamicTpProperties oldProp) {
         tpContext.refresh(oldProp);
         pfContext.refresh();
+        NotifyManager.refresh();
     }
 
     /**
