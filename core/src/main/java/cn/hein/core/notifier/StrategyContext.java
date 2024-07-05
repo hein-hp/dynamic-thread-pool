@@ -25,9 +25,10 @@ public class StrategyContext implements InitializingBean {
      * @param type      the notification type
      * @param content   the content of the notification
      * @param timestamp the timestamp of the notification
+     * @param sendKey   the send key of the notification
      */
-    public void notify(NotifyTypeEnum type, AlarmContent content, long timestamp) {
-        STRATEGY_MAP.get(type).notify(content, timestamp);
+    public void notify(NotifyTypeEnum type, AlarmContent content, long timestamp, String sendKey) throws Exception {
+        STRATEGY_MAP.get(type).notify(content, timestamp, sendKey);
     }
 
     @Override
