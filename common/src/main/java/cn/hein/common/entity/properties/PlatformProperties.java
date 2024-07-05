@@ -3,8 +3,6 @@ package cn.hein.common.entity.properties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Configuration properties class for notify platforms.
  *
@@ -33,14 +31,4 @@ public class PlatformProperties {
      * Whether to enable notification.
      */
     private boolean enabled;
-
-    /**
-     * Notify notification interval.
-     */
-    private String notifyInterval;
-
-    /**
-     * Notify notification interval unit.
-     */
-    private TimeUnit notifyTimeUnit;
 }

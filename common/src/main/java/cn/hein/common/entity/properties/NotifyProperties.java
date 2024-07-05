@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Configuration properties class for notify.
@@ -23,6 +24,16 @@ public class NotifyProperties {
      * Notification platform configuration.
      */
     private String platformKey;
+
+    /**
+     * Notify notification interval.
+     */
+    private int notifyInterval;
+
+    /**
+     * Notify notification interval unit.
+     */
+    private TimeUnit notifyTimeUnit;
 
     /**
      * Notification item configuration.
