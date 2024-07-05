@@ -136,11 +136,11 @@ public abstract class AbstractEquator implements Equator {
      *
      * @param fields1 First set of field names.
      * @param fields2 Second set of field names.
-     * @return Set containing either the intersection or union of field names.
+     * @return List containing either the intersection or union of field names.
      */
-    Set<String> getAllFieldNames(Set<String> fields1, Set<String> fields2) {
-        return bothExistFieldOnly ? (Set<String>) CollUtil.intersection(fields1, fields2)
-                : (Set<String>) CollUtil.union(fields1, fields2);
+    List<String> getAllFieldNames(Set<String> fields1, Set<String> fields2) {
+        return bothExistFieldOnly ? (List<String>) CollUtil.intersection(fields1, fields2)
+                : (List<String>) CollUtil.union(fields1, fields2);
     }
 
     /**
