@@ -20,7 +20,7 @@ public class DynamicTpProperties {
     /**
      * Whether to notify configuration changes
      */
-    private boolean change = true;
+    private ChangeProperties change;
 
     /**
      * Monitoring configurations.

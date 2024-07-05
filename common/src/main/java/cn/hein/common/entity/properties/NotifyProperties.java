@@ -19,7 +19,7 @@ public class NotifyProperties {
     private boolean enabled = true;
 
     /**
-     * Notification platform configuration.
+     * Notification platform key.
      */
     private String platformKey;
 

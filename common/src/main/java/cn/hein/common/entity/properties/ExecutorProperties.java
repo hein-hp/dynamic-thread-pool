@@ -50,7 +50,7 @@ public class ExecutorProperties {
     /**
      * Whether core threads can time out.
      */
-    private boolean allowCoreThreadTimeout = false;
+    private boolean allowCoreThreadTimeOut = false;
 
     /**
      * Rejected execution handler policy.
