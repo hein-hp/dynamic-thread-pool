@@ -40,10 +40,12 @@ public class EmailNotifier implements Strategy {
     @Override
     public void notify(AlarmContent content, long timestamp, String sendKey) throws Exception {
         PlatformProperties platforms = context.getPlatforms(sendKey);
-        mailSender.sendMailWithAttachment(platforms.getReceiver(),
-                "【报警】动态线程池运行告警",
-                "AlarmTemplate.ftl",
-                buildModel(content, platforms, timestamp), new ClassPathResource("images/email.png").getFile());
+        if (platforms.isEnabled()) {
+            mailSender.sendMailWithAttachment(platforms.getReceiver(),
+                    "【报警】动态线程池运行告警",
+                    "AlarmTemplate.ftl",
+                    buildModel(content, platforms, timestamp), new ClassPathResource("images/email.png").getFile());
+        }
     }
 
     private Map<String, Object> buildModel(AlarmContent content, PlatformProperties platform, long timestamp) {
