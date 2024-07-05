@@ -1,6 +1,5 @@
 package cn.hein.core.event;
 
-import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -8,7 +7,6 @@ import org.springframework.context.ApplicationEvent;
  *
  * @author hein
  */
-@Getter
 public class NotifyEvent extends ApplicationEvent {
 
     public NotifyEvent(Object source) {
