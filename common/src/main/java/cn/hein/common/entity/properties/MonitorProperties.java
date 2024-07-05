@@ -1,7 +1,6 @@
 package cn.hein.common.entity.properties;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,7 +10,6 @@ import java.util.concurrent.TimeUnit;
  * @author hein
  */
 @Data
-@EqualsAndHashCode
 public class MonitorProperties {
 
     /**

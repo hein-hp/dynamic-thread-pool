@@ -1,7 +1,6 @@
 package cn.hein.common.entity.properties;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * Configuration properties class for notify platforms.
@@ -9,7 +8,6 @@ import lombok.EqualsAndHashCode;
  * @author hein
  */
 @Data
-@EqualsAndHashCode
 public class PlatformProperties {
 
     /**
