@@ -31,7 +31,7 @@ public class DynamicTpPostProcessor implements BeanPostProcessor {
             // handle allowCoreThreadTimeout property, maybe need to be optimized in the future
             Map<String, ExecutorProperties> map = getBean(DynamicTpProperties.class).getExecutors()
                     .stream().collect(Collectors.toMap(ExecutorProperties::getBeanName, v -> v));
-            if (map.containsKey(beanName) && map.get(beanName).isAllowCoreThreadTimeout()) {
+            if (map.containsKey(beanName) && map.get(beanName).isAllowCoreThreadTimeOut()) {
                 executor.allowCoreThreadTimeOut(true);
             }
             return executor;
