@@ -1,36 +1,32 @@
 package cn.hein.common.entity.properties;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import java.util.concurrent.TimeUnit;
 
 /**
- * Configuration properties class for alarm platforms.
+ * Configuration properties class for notify platforms.
  *
  * @author hein
  */
 @Data
-@EqualsAndHashCode
 public class PlatformProperties {
 
     /**
-     * Alarm notification platform
+     * Notify notification key.
+     */
+    private String key;
+
+    /**
+     * Notify notification platform
      */
     private String platform;
 
     /**
-     * Alarm notification recipient.
+     * Notify notification recipient.
      */
     private String receiver;
 
     /**
-     * Alarm notification interval.
+     * Whether to enable notification.
      */
-    private String notifyInterval;
-
-    /**
-     * Alarm notification interval unit.
-     */
-    private TimeUnit notifyTimeUnit;
+    private boolean enabled;
 }

@@ -4,14 +4,18 @@ import cn.hein.common.constant.executor.NacosConstant;
 import cn.hein.common.entity.properties.DynamicTpProperties;
 import cn.hein.common.enums.properties.PropertiesTypeEnum;
 import cn.hein.common.toolkit.StringUtil;
-import cn.hein.core.DynamicTpContext;
+import cn.hein.core.context.DynamicTpContext;
+import cn.hein.core.context.NotifyPlatformContext;
+import cn.hein.core.notifier.NotifyManager;
 import cn.hein.core.support.PropertiesBindHelper;
 import cn.hein.core.support.PropertiesParseHelper;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,11 +28,17 @@ import java.util.stream.Collectors;
 public abstract class AbstractRefresher implements Refresher {
 
     private final DynamicTpProperties properties;
-    private final DynamicTpContext context;
+    private final DynamicTpContext tpContext;
+    private final NotifyPlatformContext pfContext;
 
-    protected AbstractRefresher(DynamicTpProperties properties, DynamicTpContext context) {
+    protected static final ThreadLocal<DynamicTpProperties> PROPERTIES_THREAD_LOCAL = new InheritableThreadLocal<>();
+
+    protected AbstractRefresher(DynamicTpProperties properties,
+                                DynamicTpContext tpContext,
+                                NotifyPlatformContext pfContext) {
         this.properties = properties;
-        this.context = context;
+        this.tpContext = tpContext;
+        this.pfContext = pfContext;
     }
 
     /**
@@ -48,12 +58,14 @@ public abstract class AbstractRefresher implements Refresher {
      * @param prop The properties map to bind.
      */
     protected void refresh(Map<Object, Object> prop) {
-        DynamicTpProperties oldProp = beforeRefresh();
+        beforeRefresh();
         PropertiesBindHelper.bindProperties(prop, properties);
         // set beanName
         properties.getExecutors()
                 .forEach(each -> each.setBeanName(StringUtil.kebabCaseToCamelCase(each.getThreadPoolName())));
-        doRefresh(oldProp);
+        doRefresh(Optional.ofNullable(PROPERTIES_THREAD_LOCAL.get())
+                .orElseThrow(() -> new RuntimeException("no properties in PROPERTIES_THREAD_LOCAL.")));
+        // PROPERTIES_THREAD_LOCAL should be cleared after refresh
         afterRefresh();
     }
 
@@ -63,12 +75,14 @@ public abstract class AbstractRefresher implements Refresher {
      * @param environment The Spring Environment containing the properties.
      */
     protected void refresh(Environment environment) {
-        DynamicTpProperties oldProp = beforeRefresh();
+        beforeRefresh();
         PropertiesBindHelper.bindProperties(environment, properties);
         // set beanName
         properties.getExecutors()
                 .forEach(each -> each.setBeanName(StringUtil.kebabCaseToCamelCase(each.getThreadPoolName())));
-        doRefresh(oldProp);
+        doRefresh(Optional.ofNullable(PROPERTIES_THREAD_LOCAL.get())
+                .orElseThrow(() -> new RuntimeException("no properties in PROPERTIES_THREAD_LOCAL.")));
+        // PROPERTIES_THREAD_LOCAL should be cleared after refresh
         afterRefresh();
     }
 
@@ -78,7 +92,9 @@ public abstract class AbstractRefresher implements Refresher {
      * @param oldProp The previous properties before the refresh.
      */
     private void doRefresh(DynamicTpProperties oldProp) {
-        context.refresh(oldProp);
+        tpContext.refresh(oldProp);
+        pfContext.refresh();
+        NotifyManager.refresh();
     }
 
     /**
@@ -98,14 +114,21 @@ public abstract class AbstractRefresher implements Refresher {
     }
 
     /**
+     * Determines whether a notify is needed based on the property that is enabled
+     *
+     * @return true if a notify is needed, false otherwise.
+     */
+    protected boolean needNotify() {
+        return properties.getChange().isEnabled() && StrUtil.isNotEmpty(properties.getChange().getPlatformKey());
+    }
+
+    /**
      * Method called after the refresh operation has been performed.
      */
     protected abstract void afterRefresh();
 
     /**
-     * Method called before the refresh operation to prepare the old properties.
-     *
-     * @return The old properties before the refresh.
+     * Method called before the refresh operation has been performed.
      */
-    protected abstract DynamicTpProperties beforeRefresh();
+    protected abstract void beforeRefresh();
 }

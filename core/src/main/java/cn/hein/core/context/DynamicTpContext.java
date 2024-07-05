@@ -1,4 +1,4 @@
-package cn.hein.core;
+package cn.hein.core.context;
 
 import cn.hein.common.entity.properties.DynamicTpProperties;
 import cn.hein.common.entity.properties.ExecutorProperties;
@@ -8,9 +8,13 @@ import cn.hein.common.queue.ResizeLinkedBlockingQueue;
 import cn.hein.common.spring.ApplicationContextHolder;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.executor.NamedThreadFactory;
+import cn.hein.core.monitor.MonitorController;
+import cn.hein.core.support.PropertiesEqualHelper;
 import cn.hutool.core.collection.CollUtil;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -25,23 +29,24 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Getter
+@Component
+@RequiredArgsConstructor
 public class DynamicTpContext {
 
+    /**
+     * Dynamic thread pool executor map.
+     */
     private static final Map<String, DynamicTpExecutor> DYNAMIC_CONTEXT = new ConcurrentHashMap<>();
 
     private final DynamicTpProperties properties;
-
-    public DynamicTpContext(DynamicTpProperties properties) {
-        this.properties = properties;
-    }
+    private final MonitorController monitor;
 
     /**
      * Lists all registered dynamic thread pool names.
      *
      * @return A list of thread pool names.
      */
-    public List<String> listDynamicTp() {
-        System.out.println(DYNAMIC_CONTEXT);
+    public static List<String> listDynamicTp() {
         return CollUtil.newArrayList(DYNAMIC_CONTEXT.keySet());
     }
 
@@ -51,7 +56,7 @@ public class DynamicTpContext {
      * @param threadPoolName The name of the thread pool.
      * @return The DynamicTpExecutor instance.
      */
-    public DynamicTpExecutor getDynamicTp(final String threadPoolName) {
+    public static DynamicTpExecutor getDynamicTp(final String threadPoolName) {
         return Optional.ofNullable(DYNAMIC_CONTEXT.get(threadPoolName))
                 .orElseThrow(() -> new RuntimeException("Dynamic thread pool not found: " + threadPoolName));
     }
@@ -71,12 +76,21 @@ public class DynamicTpContext {
      * @param oldProp The previous properties.
      */
     public void refresh(DynamicTpProperties oldProp) {
-        if (properties.equals(oldProp)) {
+        if (PropertiesEqualHelper.equal(oldProp, properties)) {
             return;
         }
         log.info("DynamicTp refresh initiated. Old properties: {}, New properties: {}", oldProp, properties);
         refreshExecutor();
-        // Additional refresh logic for other properties will be added here.
+        refreshMonitor(oldProp);
+    }
+
+    private void refreshMonitor(DynamicTpProperties oldProp) {
+        if (properties.getMonitor().isEnabled() && !oldProp.getMonitor().isEnabled()) {
+            monitor.start(properties);
+        }
+        if (!properties.getMonitor().isEnabled() && oldProp.getMonitor().isEnabled()) {
+            monitor.stop();
+        }
     }
 
     private void refreshExecutor() {
@@ -124,14 +138,19 @@ public class DynamicTpContext {
         if (executor.getMaximumPoolSize() != prop.getMaximumPoolSize()) {
             executor.setMaximumPoolSize(prop.getMaximumPoolSize());
         }
-        if (!executor.getExecutorNamePrefix().equals(prop.getExecutorNamePrefix())) {
-            executor.setThreadFactory(new NamedThreadFactory(prop.getExecutorNamePrefix(), 0L));
+        if (executor.getThreadFactory() instanceof NamedThreadFactory namedThreadFactory) {
+            if (namedThreadFactory.getPrefix().equals(prop.getExecutorNamePrefix())) {
+                executor.setThreadFactory(new NamedThreadFactory(prop.getExecutorNamePrefix(), 0L));
+            }
         }
         if (executor.getKeepAliveTime(TimeUnit.NANOSECONDS) != prop.getTimeUnit().toNanos(prop.getKeepAliveTime())) {
+            // super
             executor.setKeepAliveTime(prop.getKeepAliveTime(), prop.getTimeUnit());
+            executor.setKeepAliveTime(prop.getKeepAliveTime());
+            executor.setUnit(prop.getTimeUnit());
         }
-        if (executor.allowsCoreThreadTimeOut() != prop.isAllowCoreThreadTimeout()) {
-            executor.allowCoreThreadTimeOut(prop.isAllowCoreThreadTimeout());
+        if (executor.allowsCoreThreadTimeOut() != prop.isAllowCoreThreadTimeOut()) {
+            executor.allowCoreThreadTimeOut(prop.isAllowCoreThreadTimeOut());
         }
         executor.setRejectedExecutionHandler(RejectionPolicyTypeEnum.getRejectionPolicy(prop.getRejectedExecutionHandler()));
     }

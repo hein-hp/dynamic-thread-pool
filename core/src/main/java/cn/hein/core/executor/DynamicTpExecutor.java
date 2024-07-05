@@ -1,6 +1,7 @@
 package cn.hein.core.executor;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -17,7 +18,11 @@ public class DynamicTpExecutor extends ThreadPoolExecutor {
 
     private final String threadPoolName;
 
-    private final String executorNamePrefix;
+    @Setter
+    private long keepAliveTime;
+
+    @Setter
+    private TimeUnit unit;
 
     public DynamicTpExecutor(
             String threadPoolName,
@@ -30,6 +35,7 @@ public class DynamicTpExecutor extends ThreadPoolExecutor {
             RejectedExecutionHandler handler) {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, new NamedThreadFactory(executorNamePrefix, 0L), handler);
         this.threadPoolName = threadPoolName;
-        this.executorNamePrefix = executorNamePrefix;
+        this.keepAliveTime = keepAliveTime;
+        this.unit = unit;
     }
 }

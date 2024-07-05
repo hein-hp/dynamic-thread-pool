@@ -1,9 +1,9 @@
 package cn.hein.common.entity.properties;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Configuration properties class for notify.
@@ -11,7 +11,6 @@ import java.util.List;
  * @author hein
  */
 @Data
-@EqualsAndHashCode
 public class NotifyProperties {
 
     /**
@@ -20,9 +19,19 @@ public class NotifyProperties {
     private boolean enabled = true;
 
     /**
-     * Notification platform configuration.
+     * Notification platform key.
      */
-    private String platform;
+    private String platformKey;
+
+    /**
+     * Notify notification interval.
+     */
+    private int notifyInterval;
+
+    /**
+     * Notify notification interval unit.
+     */
+    private TimeUnit notifyTimeUnit;
 
     /**
      * Notification item configuration.
@@ -35,7 +44,6 @@ public class NotifyProperties {
      * @author hein
      */
     @Data
-    @EqualsAndHashCode
     public static class NotifyItem {
 
         /**

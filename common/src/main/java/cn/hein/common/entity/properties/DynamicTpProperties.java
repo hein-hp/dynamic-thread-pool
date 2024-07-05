@@ -1,7 +1,6 @@
 package cn.hein.common.entity.properties;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -11,7 +10,6 @@ import java.util.List;
  * @author hein
  */
 @Data
-@EqualsAndHashCode
 public class DynamicTpProperties {
 
     /**
@@ -22,7 +20,7 @@ public class DynamicTpProperties {
     /**
      * Whether to notify configuration changes
      */
-    private boolean change = true;
+    private ChangeProperties change;
 
     /**
      * Monitoring configurations.

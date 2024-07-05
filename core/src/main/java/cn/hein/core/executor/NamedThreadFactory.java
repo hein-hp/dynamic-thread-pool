@@ -1,5 +1,7 @@
 package cn.hein.core.executor;
 
+import lombok.Getter;
+
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -8,6 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @author hein
  */
+@Getter
 public class NamedThreadFactory implements ThreadFactory {
 
     /**
