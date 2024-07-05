@@ -33,7 +33,7 @@
         <li>报警项：${alarmItemTypes}</li>
         <ul>
             <#list alarmItemList as item>
-                <li>报警阈值 / 当前值：${item.threshold} / ${item.value}（${item.type}）</li>
+                <li>报警阈值 / 当前值：${item.threshold}% / ${item.value}%（${item.type}）</li>
             </#list>
         </ul>
         <li>接受人：${receiver}</li>
