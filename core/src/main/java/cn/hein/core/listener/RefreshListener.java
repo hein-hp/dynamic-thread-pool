@@ -3,6 +3,8 @@ package cn.hein.core.listener;
 import cn.hein.common.entity.properties.DynamicTpProperties;
 import cn.hein.common.entity.properties.ExecutorProperties;
 import cn.hein.common.enums.alarm.NotifyTypeEnum;
+import cn.hein.common.equator.Equator;
+import cn.hein.common.equator.FieldEquator;
 import cn.hein.common.equator.FieldInfo;
 import cn.hein.core.context.NotifyPlatformContext;
 import cn.hein.core.event.RefreshEvent;
@@ -54,7 +56,7 @@ public class RefreshListener implements ApplicationListener<RefreshEvent> {
                 .collect(Collectors.toMap(ExecutorProperties::getThreadPoolName, v -> v));
         Map<String, List<FieldInfo>> diff = new HashMap<>();
         newProp.getExecutors().forEach(executorProp -> {
-            List<FieldInfo> diffFields = PropertiesEqualHelper.getDifferentFields(executorProp, oldMap.get(executorProp.getThreadPoolName()));
+            List<FieldInfo> diffFields = getEquator().getDifferentFields(executorProp, oldMap.get(executorProp.getThreadPoolName()));
             if (!diffFields.isEmpty()) {
                 diff.put(executorProp.getThreadPoolName(), diffFields);
             }
@@ -71,5 +73,14 @@ public class RefreshListener implements ApplicationListener<RefreshEvent> {
                 log.error("change notify failed.", e);
             }
         });
+    }
+
+    private Equator getEquator() {
+        return new FieldEquator(null, List.of(
+                "threadPoolName",
+                "executorNamePrefix",
+                "notify",
+                "beanName"
+        ));
     }
 }
