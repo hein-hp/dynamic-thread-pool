@@ -9,12 +9,29 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>example</artifactId>
+    <artifactId>dynamic-spring-boot-starter</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.hein</groupId>
+            <artifactId>dynamic-thread-pool-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hein</groupId>
+            <artifactId>dynamic-thread-pool-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

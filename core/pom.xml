@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>core</artifactId>
+    <artifactId>dynamic-thread-pool-core</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -21,7 +21,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.hein</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>dynamic-thread-pool-common</artifactId>
         </dependency>
 
         <dependency>
@@ -42,6 +42,11 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
         <dependency>

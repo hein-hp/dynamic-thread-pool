@@ -23,13 +23,13 @@
         <dependencies>
             <dependency>
                 <groupId>cn.hein</groupId>
-                <artifactId>common</artifactId>
+                <artifactId>dynamic-thread-pool-common</artifactId>
                 <version>${revision}</version>
             </dependency>
 
             <dependency>
                 <groupId>cn.hein</groupId>
-                <artifactId>core</artifactId>
+                <artifactId>dynamic-thread-pool-core</artifactId>
                 <version>${revision}</version>
             </dependency>
 
