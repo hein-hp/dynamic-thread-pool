@@ -41,7 +41,7 @@ public abstract class AbstractMonitor implements Monitor {
     public void collect() {
         try {
             if (isRunning) {
-                DynamicTpProperties.getInstance().getExecutors().forEach(each -> {
+                DynamicTpProperties.getInstance().getExecutors().stream().filter(ExecutorProperties::isMonitorEnable).forEach(each -> {
                     DynamicTpExecutor executor = DynamicTpContext.getDynamicTp(each.getThreadPoolName());
                     if (!ApplicationContextHolder.containsBean(each.getBeanName())) {
                         throw new RuntimeException("DynamicTp bean not found.");

@@ -79,6 +79,7 @@ public class RefreshListener implements ApplicationListener<RefreshEvent> {
         return new FieldEquator(null, List.of(
                 "threadPoolName",
                 "executorNamePrefix",
+                "monitorEnable",
                 "notify",
                 "beanName"
         ));

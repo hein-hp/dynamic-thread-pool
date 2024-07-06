@@ -63,6 +63,11 @@ public class ExecutorProperties {
     private String executorNamePrefix = "";
 
     /**
+     * Whether to enable monitoring.
+     */
+    private boolean monitorEnable;
+
+    /**
      * Detailed notification configurations.
      */
     private NotifyProperties notify;
