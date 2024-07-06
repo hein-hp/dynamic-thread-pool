@@ -7,12 +7,11 @@ import cn.hein.core.executor.DynamicTpExecutor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static cn.hein.common.spring.ApplicationContextHolder.getBean;
+import static cn.hein.core.spring.ApplicationContextHolder.getBean;
 
 /**
  * Post-processor for Spring Beans to intercept instances of DynamicTpExecutor and
@@ -20,7 +19,6 @@ import static cn.hein.common.spring.ApplicationContextHolder.getBean;
  *
  * @author hein
  */
-@Component
 public class DynamicTpPostProcessor implements BeanPostProcessor {
 
     @Override

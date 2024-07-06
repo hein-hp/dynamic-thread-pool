@@ -2,15 +2,14 @@ package cn.hein.core.initialize;
 
 import cn.hein.common.entity.properties.DynamicTpProperties;
 import cn.hein.common.pattern.chain.Filter;
-import cn.hein.common.spring.ApplicationContextHolder;
 import cn.hein.core.context.NotifyPlatformContext;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.monitor.AbstractMonitor;
 import cn.hein.core.monitor.MonitorController;
 import cn.hein.core.notifier.NotifyManager;
+import cn.hein.core.spring.ApplicationContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,12 +23,9 @@ public class DynamicTpInitialize implements InitializingBean {
 
     private final DynamicTpProperties prop;
     private final MonitorController monitor;
-    private final ApplicationContext context;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        // init ApplicationContextHolder
-        context.getBean(ApplicationContextHolder.class);
         initDependsOnBeans(new Class[]{DynamicTpExecutor.class, Filter.class});
         initMonitorExecutor(prop);
         initPlatform();

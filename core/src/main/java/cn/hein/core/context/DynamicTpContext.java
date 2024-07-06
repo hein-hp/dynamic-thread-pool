@@ -5,7 +5,7 @@ import cn.hein.common.entity.properties.ExecutorProperties;
 import cn.hein.common.enums.executors.BlockingQueueTypeEnum;
 import cn.hein.common.enums.executors.RejectionPolicyTypeEnum;
 import cn.hein.common.queue.ResizeLinkedBlockingQueue;
-import cn.hein.common.spring.ApplicationContextHolder;
+import cn.hein.core.spring.ApplicationContextHolder;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.executor.NamedThreadFactory;
 import cn.hein.core.monitor.MonitorController;

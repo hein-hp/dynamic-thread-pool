@@ -10,7 +10,7 @@ import cn.hein.common.pattern.chain.Filter;
 import cn.hein.common.pattern.chain.FilterContext;
 import cn.hein.common.pattern.chain.HandlerChain;
 import cn.hein.common.pattern.chain.HandlerChainFactory;
-import cn.hein.common.spring.ApplicationContextHolder;
+import cn.hein.core.spring.ApplicationContextHolder;
 import cn.hein.core.context.DynamicTpContext;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.executor.NamedThreadFactory;
@@ -41,7 +41,7 @@ public abstract class AbstractMonitor implements Monitor {
     public void collect() {
         try {
             if (isRunning) {
-                DynamicTpProperties.getInstance().getExecutors().forEach(each -> {
+                DynamicTpProperties.getInstance().getExecutors().stream().filter(ExecutorProperties::isMonitorEnable).forEach(each -> {
                     DynamicTpExecutor executor = DynamicTpContext.getDynamicTp(each.getThreadPoolName());
                     if (!ApplicationContextHolder.containsBean(each.getBeanName())) {
                         throw new RuntimeException("DynamicTp bean not found.");

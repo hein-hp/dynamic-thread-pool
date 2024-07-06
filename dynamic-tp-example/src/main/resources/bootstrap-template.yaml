@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: dynamic-tp-example
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: server-addr
+        username: username
+        password: password
+      config:
+        server-addr: server-addr
+        file-extension: yaml
+        group: DEFAULT_GROUP
+        username: username
+        password: password
+        extension-configs:
+          - data-id: dynamic-tp-example
+            group: DEFAULT_GROUP
+            refresh: true
+  mail:
+    host: smtp.qq.com
+    username: username
+    password: password
+    port: 587
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: false
+            required: false
+        debug: true
