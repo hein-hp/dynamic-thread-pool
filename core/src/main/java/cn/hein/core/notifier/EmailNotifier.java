@@ -11,6 +11,8 @@ import cn.hein.core.service.EmailService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -32,6 +34,7 @@ public class EmailNotifier implements Strategy {
     private final NotifyPlatformContext context;
     private final EmailService mailSender;
     private final Environment environment;
+    private final DiscoveryClient discoveryClient;
 
     private static final List<String> executorFieldList = List.of(
             "corePoolSize",
@@ -74,8 +77,11 @@ public class EmailNotifier implements Strategy {
     private Map<String, Object> changeBuildModel(Map<String, List<FieldInfo>> changeFields, PlatformProperties platform, long timestamp) {
         Map<String, Object> model = new HashMap<>();
         model.put("title", "动态线程池运行告警");
-        model.put("serviceName", environment.getProperty("spring.application.name"));
-        model.put("instanceInfo", "192.168.88.100:8080");
+        String applicationName = environment.getProperty("spring.application.name");
+        model.put("serviceName", applicationName);
+        ServiceInstance instance = discoveryClient.getInstances(applicationName)
+                .stream().findFirst().orElseThrow(() -> new RuntimeException("no service."));
+        model.put("instanceInfo", instance.getHost() + ":" + instance.getPort());
         model.put("environment", environment.getProperty("spring.profiles.active"));
         model.put("receiver", platform.getReceiver());
         model.put("changeTime", new Date(timestamp));
@@ -147,8 +153,11 @@ public class EmailNotifier implements Strategy {
         List<String> alarmTypes = content.getAlarmItems().stream().map(item -> item.getType().toString()).toList();
         Map<String, Object> model = new HashMap<>();
         model.put("title", "动态线程池运行告警");
-        model.put("serviceName", environment.getProperty("spring.application.name"));
-        model.put("instanceInfo", "192.168.88.100:8080");
+        String applicationName = environment.getProperty("spring.application.name");
+        model.put("serviceName", applicationName);
+        ServiceInstance instance = discoveryClient.getInstances(applicationName)
+                .stream().findFirst().orElseThrow(() -> new RuntimeException("no service."));
+        model.put("instanceInfo", instance.getHost() + ":" + instance.getPort());
         model.put("environment", environment.getProperty("spring.profiles.active"));
         model.put("threadPoolName", content.getThreadPoolName());
         model.put("alarmItemTypes", String.join(", ", alarmTypes));
