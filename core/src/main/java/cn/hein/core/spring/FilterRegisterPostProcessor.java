@@ -5,7 +5,6 @@ import cn.hein.common.pattern.chain.FilterContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 
 /**
  * Post-processor for Spring Beans to intercept instances of Filter and
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
  *
  * @author hein
  */
-@Component
 public class FilterRegisterPostProcessor implements BeanPostProcessor {
 
     @Override
