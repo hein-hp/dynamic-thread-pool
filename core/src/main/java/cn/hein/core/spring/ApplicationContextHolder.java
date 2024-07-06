@@ -1,4 +1,4 @@
-package cn.hein.common.spring;
+package cn.hein.core.spring;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

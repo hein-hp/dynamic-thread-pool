@@ -3,7 +3,7 @@ package cn.hein.core.notifier;
 import cn.hein.common.entity.alarm.AlarmContent;
 import cn.hein.common.enums.alarm.NotifyTypeEnum;
 import cn.hein.common.equator.FieldInfo;
-import cn.hein.common.spring.ApplicationContextHolder;
+import cn.hein.core.spring.ApplicationContextHolder;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 

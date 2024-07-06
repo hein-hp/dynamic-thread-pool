@@ -10,7 +10,7 @@ import cn.hein.common.pattern.chain.Filter;
 import cn.hein.common.pattern.chain.FilterContext;
 import cn.hein.common.pattern.chain.HandlerChain;
 import cn.hein.common.pattern.chain.HandlerChainFactory;
-import cn.hein.common.spring.ApplicationContextHolder;
+import cn.hein.core.spring.ApplicationContextHolder;
 import cn.hein.core.context.DynamicTpContext;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.executor.NamedThreadFactory;

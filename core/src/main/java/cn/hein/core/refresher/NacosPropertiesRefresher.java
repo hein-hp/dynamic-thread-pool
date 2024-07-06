@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-import static cn.hein.common.spring.ApplicationContextHolder.getBean;
+import static cn.hein.core.spring.ApplicationContextHolder.getBean;
 
 /**
  * Nacos Properties Refresher
