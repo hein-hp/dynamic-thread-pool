@@ -2,13 +2,19 @@ package cn.hein.common.entity.properties;
 
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Configuration properties class for notify platforms.
  *
  * @author hein
  */
 @Data
-public class PlatformProperties {
+public class PlatformProperties implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -6138554731317376011L;
 
     /**
      * Notify notification key.

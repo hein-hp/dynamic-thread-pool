@@ -2,6 +2,8 @@ package cn.hein.common.entity.properties;
 
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -10,7 +12,10 @@ import java.util.concurrent.TimeUnit;
  * @author hein
  */
 @Data
-public class ExecutorProperties {
+public class ExecutorProperties implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1739858411226265256L;
 
     /**
      * The name of the thread pool.

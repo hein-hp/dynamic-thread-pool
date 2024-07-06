@@ -2,6 +2,8 @@ package cn.hein.common.entity.properties;
 
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -11,7 +13,10 @@ import java.util.concurrent.TimeUnit;
  * @author hein
  */
 @Data
-public class NotifyProperties {
+public class NotifyProperties implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -5042095531791605656L;
 
     /**
      * Whether to enable alert notifications.
@@ -44,7 +49,10 @@ public class NotifyProperties {
      * @author hein
      */
     @Data
-    public static class NotifyItem {
+    public static class NotifyItem implements Serializable {
+
+        @Serial
+        private static final long serialVersionUID = -6937665706234416425L;
 
         /**
          * Monitoring type.

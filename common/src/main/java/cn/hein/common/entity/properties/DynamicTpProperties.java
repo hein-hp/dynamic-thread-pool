@@ -2,6 +2,8 @@ package cn.hein.common.entity.properties;
 
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +12,10 @@ import java.util.List;
  * @author hein
  */
 @Data
-public class DynamicTpProperties {
+public class DynamicTpProperties implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -2352174447056567161L;
 
     /**
      * Whether to enable dynamic thread pools.
