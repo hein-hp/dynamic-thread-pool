@@ -59,4 +59,20 @@ public enum RejectionPolicyTypeEnum {
         }
         throw new IllegalArgumentException("Unknown rejection policy type: " + name);
     }
+
+    /**
+     * Retrieves a rejection policy enum based on the provided name.
+     *
+     * @param name The name identifying the rejection policy.
+     * @return An enum of the specified rejection policy.
+     * @throws IllegalArgumentException If the policy type is unknown.
+     */
+    public static RejectionPolicyTypeEnum getRejectionPolicyEnum(String name) {
+        for (RejectionPolicyTypeEnum type : RejectionPolicyTypeEnum.values()) {
+            if (type.name.equalsIgnoreCase(name)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Unknown rejection policy type: " + name);
+    }
 }
