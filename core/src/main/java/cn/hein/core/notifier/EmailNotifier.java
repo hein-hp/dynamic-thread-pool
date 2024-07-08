@@ -176,6 +176,10 @@ public class EmailNotifier implements Strategy {
         model.put("queueCapacity", executor.getQueue().size() + executor.getQueue().remainingCapacity());
         model.put("queueSize", executor.getQueue().size());
         model.put("remainingCapacity", executor.getQueue().remainingCapacity());
+
+        // Rejected Count
+        model.put("rejectedExecutionHandler", executor.getOriginalHandlerType());
+        model.put("rejectedTotalCount", executor.getRejectedCount());
         return model;
     }
 }

@@ -1,3 +1,9 @@
+<#macro appendPercentIfType type>
+    <#if type == "LIVENESS" || type == "CAPACITY">
+        %
+    </#if>
+</#macro>
+
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -33,7 +39,9 @@
         <li>报警项：${alarmItemTypes}</li>
         <ul>
             <#list alarmItemList as item>
-                <li>报警阈值 / 当前值：${item.threshold}% / ${item.value}%（${item.type}）</li>
+                <li>报警阈值 / 当前值：${item.threshold}<@appendPercentIfType item.type/> /
+                    ${item.value}<@appendPercentIfType item.type/>（${item.type}）
+                </li>
             </#list>
         </ul>
         <li>接受人：${receiver}</li>
@@ -52,6 +60,11 @@
         <li>队列容量：${queueCapacity}</li>
         <li>队列任务数量：${queueSize}</li>
         <li>队列剩余容量：${remainingCapacity}</li>
+    </ul>
+    <h3>拒绝策略相关配置</h3>
+    <ul>
+        <li>拒绝策略：${rejectedExecutionHandler}</li>
+        <li>总拒绝次数：${rejectedTotalCount}</li>
     </ul>
 </div>
 </body>

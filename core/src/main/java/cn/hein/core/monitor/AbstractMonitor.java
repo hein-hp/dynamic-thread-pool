@@ -52,6 +52,7 @@ public abstract class AbstractMonitor implements Monitor {
                             // must cast
                             context -> monitor((ExecutorStats) context, each),
                             FilterContext.getFilters("COLLECT").toArray(new Filter[0]));
+                    // stats will bean fill properties
                     chain.execute(stats);
                 });
             }
@@ -82,19 +83,37 @@ public abstract class AbstractMonitor implements Monitor {
 
     private void doMonitor(ExecutorStats stats, NotifyProperties.NotifyItem item, AlarmContent content) {
         switch (AlarmTypeEnum.from(item.getType())) {
-            case LIVENESS:
+            case LIVENESS -> {
                 if (item.isEnabled()) {
                     monitorLiveness(stats, item.getThreshold(), content);
                 }
-                break;
-            case CAPACITY:
+            }
+            case CAPACITY -> {
                 if (item.isEnabled()) {
                     monitorCapacity(stats, item.getThreshold(), content);
                 }
-                break;
-            default:
-                log.warn("no monitor type.");
-                break;
+            }
+            case REJECTED -> {
+                if (item.isEnabled()) {
+                    monitorRejected(stats, item.getThreshold(), content);
+                }
+            }
+            default -> log.warn("no monitor type.");
+        }
+    }
+
+    private void monitorRejected(ExecutorStats stats, double threshold, AlarmContent content) {
+        double rejected = stats.getRejectedCycleCount();
+        if (rejected >= threshold) {
+            if (content.getAlarmItems() == null) {
+                content.setAlarmItems(new ArrayList<>());
+            }
+            AlarmContent.AlarmItem item = AlarmContent.AlarmItem.builder()
+                    .type(AlarmTypeEnum.REJECTED)
+                    .value(rejected)
+                    .threshold(threshold)
+                    .build();
+            content.getAlarmItems().add(item);
         }
     }
 
