@@ -34,4 +34,14 @@ public class ExecutorStats {
      * The remaining capacity of the task queue.
      */
     private int remainingQueueCapacity;
+
+    /**
+     * The rejected count in the cycle.
+     */
+    private long rejectedCycleCount;
+
+    /**
+     * The total rejected count.
+     */
+    private long rejectedCount;
 }

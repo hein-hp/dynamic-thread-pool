@@ -18,7 +18,12 @@ public enum AlarmTypeEnum {
     /**
      * Represents an alarm indicating the usage rate of a blocking queue.
      */
-    CAPACITY("capacity", "阻塞队列容量告警");
+    CAPACITY("capacity", "阻塞队列容量告警"),
+
+    /**
+     * Represents an alarm indicating the rejection count of a thread pool.
+     */
+    REJECTED("rejected", "拒绝次数告警");
 
     /**
      * The unique code associated with the alarm type.

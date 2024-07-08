@@ -5,10 +5,11 @@ import cn.hein.common.entity.properties.ExecutorProperties;
 import cn.hein.common.enums.executors.BlockingQueueTypeEnum;
 import cn.hein.common.enums.executors.RejectionPolicyTypeEnum;
 import cn.hein.common.queue.ResizeLinkedBlockingQueue;
-import cn.hein.core.spring.ApplicationContextHolder;
 import cn.hein.core.executor.DynamicTpExecutor;
 import cn.hein.core.executor.NamedThreadFactory;
+import cn.hein.core.executor.reject.RejectHandlerProxyFactory;
 import cn.hein.core.monitor.MonitorController;
+import cn.hein.core.spring.ApplicationContextHolder;
 import cn.hein.core.support.PropertiesEqualHelper;
 import cn.hutool.core.collection.CollUtil;
 import lombok.Getter;
@@ -21,6 +22,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+
+import static cn.hein.common.enums.executors.RejectionPolicyTypeEnum.getRejectionPolicyEnum;
 
 /**
  * Context manager for dynamic thread pools.
@@ -152,7 +155,10 @@ public class DynamicTpContext {
         if (executor.allowsCoreThreadTimeOut() != prop.isAllowCoreThreadTimeOut()) {
             executor.allowCoreThreadTimeOut(prop.isAllowCoreThreadTimeOut());
         }
-        executor.setRejectedExecutionHandler(RejectionPolicyTypeEnum.getRejectionPolicy(prop.getRejectedExecutionHandler()));
+        // getProxy
+        RejectionPolicyTypeEnum type = getRejectionPolicyEnum(prop.getRejectedExecutionHandler());
+        executor.setOriginalHandlerType(type);
+        executor.setRejectedExecutionHandler(RejectHandlerProxyFactory.getProxy(type));
     }
 
     private void checkParam(ExecutorProperties properties) {

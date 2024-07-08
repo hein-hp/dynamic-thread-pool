@@ -115,6 +115,9 @@ dynamic:
             - type: liveness # 线程池活跃性告警
               enabled: true
               threshold: 80
+            - type: rejected # 拒绝策略执行阈值告警
+              enabled: true
+              threshold: 5 # 注意是在监控周期内的执行次数
 ```
 
 ### 注入实例
