@@ -98,7 +98,27 @@ public abstract class AbstractMonitor implements Monitor {
                     monitorRejected(stats, item.getThreshold(), content);
                 }
             }
+            case TIMEOUT -> {
+                if (item.isEnabled()) {
+                    monitorTimeout(stats, item.getThreshold(), content);
+                }
+            }
             default -> log.warn("no monitor type.");
+        }
+    }
+
+    private void monitorTimeout(ExecutorStats stats, double threshold, AlarmContent content) {
+        long timout = stats.getTimeoutCycleCount();
+        if (timout >= threshold) {
+            if (content.getAlarmItems() == null) {
+                content.setAlarmItems(new ArrayList<>());
+            }
+            AlarmContent.AlarmItem item = AlarmContent.AlarmItem.builder()
+                    .type(AlarmTypeEnum.TIMEOUT)
+                    .value(timout)
+                    .threshold(threshold)
+                    .build();
+            content.getAlarmItems().add(item);
         }
     }
 
