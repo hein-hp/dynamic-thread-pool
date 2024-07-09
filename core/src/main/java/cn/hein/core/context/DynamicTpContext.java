@@ -159,6 +159,10 @@ public class DynamicTpContext {
         RejectionPolicyTypeEnum type = getRejectionPolicyEnum(prop.getRejectedExecutionHandler());
         executor.setOriginalHandlerType(type);
         executor.setRejectedExecutionHandler(RejectHandlerProxyFactory.getProxy(type));
+        // execute timeout
+        if (executor.getExecuteTimeOut() != prop.getExecuteTimeOut()) {
+            executor.setExecuteTimeOut(prop.getExecuteTimeOut());
+        }
     }
 
     private void checkParam(ExecutorProperties properties) {
