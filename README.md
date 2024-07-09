@@ -91,6 +91,10 @@ dynamic:
         platform: email
         receiver: hein.hp@foxmail.com # 邮箱
         enabled: true
+      - key: hihi # unique key for identify
+        platform: email
+        receiver: hein.hp@foxmail.com # 邮箱
+        enabled: true
     executors: # 动态线程池配置
       - thread-pool-name: polymerization-shortlink-stats # 转驼峰后作为 BeanName
         core-pool-size: 30 # 核心线程数
@@ -115,9 +119,12 @@ dynamic:
             - type: liveness # 线程池活跃性告警
               enabled: true
               threshold: 80
-            - type: rejected # 拒绝策略执行阈值告警
+            - type: reject # 拒绝策略告警
               enabled: true
-              threshold: 5 # 注意是在监控周期内的执行次数
+              threshold: 20
+            - type: timeout # 任务执行超时告警
+              enabled: true
+              threshold: 20
 ```
 
 ### 注入实例

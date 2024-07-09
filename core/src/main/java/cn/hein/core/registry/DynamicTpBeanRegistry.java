@@ -68,7 +68,8 @@ public class DynamicTpBeanRegistry implements BeanDefinitionRegistryPostProcesso
                 BlockingQueueTypeEnum.getBlockingQueue(prop.getQueueType(), prop.getQueueCapacity()),
                 // getProxy
                 RejectHandlerProxyFactory.getProxy(originRejectionPolicy),
-                originRejectionPolicy
+                originRejectionPolicy,
+                prop.getExecuteTimeOut()
         };
     }
 

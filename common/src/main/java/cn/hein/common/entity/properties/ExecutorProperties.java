@@ -68,6 +68,11 @@ public class ExecutorProperties implements Serializable {
     private String executorNamePrefix = "";
 
     /**
+     * TimeOut for runnable execute.
+     */
+    private long executeTimeOut;
+
+    /**
      * Whether to enable monitoring.
      */
     private boolean monitorEnable;

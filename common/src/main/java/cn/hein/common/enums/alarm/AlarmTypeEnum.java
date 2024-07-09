@@ -23,7 +23,12 @@ public enum AlarmTypeEnum {
     /**
      * Represents an alarm indicating the rejection count of a thread pool.
      */
-    REJECTED("rejected", "拒绝次数告警");
+    REJECTED("rejected", "拒绝次数告警"),
+
+    /**
+     * Represents an alarm indicating the execute timeout count of a thread pool.
+     */
+    TIMEOUT("timeout", "任务执行超时次数告警");
 
     /**
      * The unique code associated with the alarm type.

@@ -44,4 +44,15 @@ public class ExecutorStats {
      * The total rejected count.
      */
     private long rejectedCount;
+
+    /**
+     * The execute timeout runnable count in the cycle.
+     */
+    private long timeoutCycleCount;
+
+    /**
+     * The execute timeout runnable count.
+     */
+    private long timeoutCount;
+
 }
